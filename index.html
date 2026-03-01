@@ -1,121 +1,166 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>السجل اليومي – للطباعة فقط</title>
+  <title>Atomoxetine Monitoring – GP/Observer (1-page A4)</title>
   <style>
     :root{
-      --font: Arial, Tahoma, sans-serif;
+      --font: Arial, system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
       --ink:#111;
       --muted:#444;
-      --border:#dcdcdc;
+      --border:#ddd;
       --bg:#fff;
+      --panel:#f3f3f3;
     }
     *{ box-sizing:border-box; }
-    body{ margin:0; font-family:var(--font); background:#f3f3f3; color:var(--ink); }
-
+    body{
+      margin:0;
+      font-family:var(--font);
+      background:var(--panel);
+      color:var(--ink);
+    }
     header{
       position:sticky; top:0; z-index:10;
-      background:#fff; border-bottom:1px solid #e6e6e6;
+      background:#fff;
+      border-bottom:1px solid var(--border);
       padding:10px 12px;
     }
     .topbar{
-      max-width:980px; margin:0 auto;
-      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      max-width:1100px;
+      margin:0 auto;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
     }
     .title{ font-weight:900; font-size:16px; }
+    .controls{ display:flex; gap:8px; flex-wrap:wrap; }
     button{
-      border:1px solid #ddd; background:#fff;
-      padding:10px 12px; border-radius:10px;
-      cursor:pointer; font-family:var(--font); font-size:14px;
-    }
-
-    main{ padding:14px; display:flex; justify-content:center; }
-
-    /* Screen preview: can scroll, not critical */
-    .sheetPreview{
-      width:210mm;
-      background:var(--bg);
-      border:1px solid #e6e6e6;
-      padding:12mm;
-    }
-
-    /* Shared block styles (used both screen + print) */
-    .hdr{
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap:8px;
-      margin-bottom:8px;
-      font-size:13px;
-    }
-    .lineBox{
       border:1px solid var(--border);
+      background:#fff;
+      padding:10px 12px;
       border-radius:10px;
-      padding:7px 9px;
-      display:flex; justify-content:space-between; align-items:center; gap:8px;
-      min-height:34px;
+      font-family:var(--font);
+      font-size:14px;
+      cursor:pointer;
     }
-    .lineBox b{ color:var(--muted); font-size:12px; white-space:nowrap; }
-    .line{ border-bottom:1px solid #777; flex:1; height:0; margin-right:8px; }
+    button:hover{ background:#fafafa; }
 
-    .sec{
+    main{ display:flex; justify-content:center; padding:14px; }
+
+    /* Preview sheet */
+    .sheet{
+      width:210mm;
+      height:297mm;      /* lock to A4 */
+      background:var(--bg);
       border:1px solid var(--border);
-      border-radius:12px;
-      padding:7px 9px;
-      margin:7px 0;
-      page-break-inside:avoid;
-    }
-    .secTitle{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:10px; margin-bottom:5px;
-      font-weight:900; font-size:14px;
+      box-shadow:0 8px 18px rgba(0,0,0,.08);
+      padding:10mm;
+      overflow:hidden;   /* no spill */
     }
 
-    .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:6px 8px; font-size:13px; }
-    .grid3{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap:6px 8px; font-size:13px; }
+    /* Compact layout */
+    .hrow{
+      display:flex; justify-content:space-between; align-items:flex-start;
+      gap:10px; margin-bottom:6px;
+    }
+    .hrow .h1{ font-weight:900; font-size:16px; }
+    .hrow .note{ font-size:11px; color:var(--muted); text-align:right; }
 
-    .opt{
-      display:flex; align-items:flex-start; gap:6px;
+    .grid3{
+      display:grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap:6px;
+      margin:6px 0 8px;
+    }
+    .field{
       border:1px solid #eee;
       border-radius:10px;
-      padding:6px 7px;
-      min-height:30px;
-    }
-    .cb{
-      width:13px; height:13px;
-      border:2px solid #111;
-      border-radius:3px;
-      margin-top:2px;
-      flex:0 0 auto;
-    }
-
-    .medRow{
-      display:flex; align-items:center; gap:8px;
-      border:1px solid #eee; border-radius:10px;
-      padding:6px 7px;
-      min-height:30px;
-    }
-    .doseLine{ border-bottom:1px solid #777; flex:1; height:0; margin-right:6px; }
-
-    .painRow{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:8px; flex-wrap:wrap; margin-top:5px; font-size:13px;
-    }
-    .painScale{ display:flex; gap:5px; flex-wrap:wrap; }
-    .num{ border:1px solid #ddd; border-radius:999px; padding:1px 6px; font-size:12px; }
-
-    .footerLine{
-      margin-top:6px;
+      padding:6px 8px;
       display:flex;
+      align-items:center;
       justify-content:space-between;
       gap:8px;
       font-size:12px;
-      color:#444;
+      background:#fff;
+    }
+    .field label{ color:var(--muted); font-weight:700; white-space:nowrap; }
+    .field input, .field select{
+      width:60%;
+      border:1px solid #ddd;
+      border-radius:8px;
+      padding:6px 8px;
+      font-size:12px;
+      outline:none;
+      background:#fff;
     }
 
+    .section{
+      border:1px solid #eee;
+      border-radius:12px;
+      padding:7px 8px;
+      margin:6px 0;
+    }
+    .stitle{
+      font-weight:900;
+      font-size:12.5px;
+      margin-bottom:4px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .sdesc{ font-size:11px; color:var(--muted); margin-top:2px; }
+
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:6px;
+    }
+    .grid4{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap:6px;
+    }
+    .mini{
+      border:1px solid #f0f0f0;
+      border-radius:10px;
+      padding:6px 8px;
+      font-size:12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      background:#fff;
+    }
+    .mini label{ color:var(--muted); font-weight:700; white-space:nowrap; }
+    .mini input, .mini select{
+      width:52%;
+      border:1px solid #ddd;
+      border-radius:8px;
+      padding:6px 8px;
+      font-size:12px;
+      background:#fff;
+    }
+
+    .yn{
+      display:flex; gap:6px; align-items:center;
+      justify-content:flex-end;
+    }
+    .yn label{ font-size:12px; color:var(--muted); }
+    .yn select{ width:80px; }
+
+    .footer{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:6px;
+      margin-top:6px;
+    }
+
+    /* Hide header when user prints the main page (we print via print-window anyway) */
     @media print{
-      header, main { display:none !important; }
+      header, main{ display:none !important; }
     }
   </style>
 </head>
@@ -123,180 +168,254 @@
 <body>
 <header>
   <div class="topbar">
-    <div class="title">السجل اليومي – للطباعة (A4 صفحة واحدة)</div>
-    <button type="button" id="btnPrint">🖨️ طباعة</button>
+    <div class="title">Atomoxetine Monitoring – GP/Observer (1-page A4)</div>
+    <div class="controls">
+      <button type="button" id="btnPrint">🖨️ Print (1 page)</button>
+      <button type="button" id="btnClear">🧹 Clear</button>
+    </div>
   </div>
 </header>
 
 <main>
-  <div class="sheetPreview" id="preview"></div>
+  <form class="sheet" id="form" autocomplete="off">
+    <div class="hrow">
+      <div>
+        <div class="h1">Observer Log (3× weekly)</div>
+        <div class="note">Complete, then Print</div>
+      </div>
+      <div class="note">No diagnosis labels • Response + Safety</div>
+    </div>
+
+    <!-- IDENTIFIERS -->
+    <div class="grid3">
+      <div class="field"><label>Patient</label><input name="patient" value="Salvana Aoshan"></div>
+      <div class="field"><label>Week #</label><input name="week" placeholder="e.g., 2"></div>
+      <div class="field"><label>Date</label><input name="date" placeholder="DD/MM/YYYY"></div>
+    </div>
+
+    <!-- MEDICATION STATE -->
+    <div class="section">
+      <div class="stitle">1) Medication state <span class="sdesc">dose + timing + side-effect signals</span></div>
+      <div class="grid4">
+        <div class="mini"><label>Atomoxetine mg</label><input name="atom_mg" placeholder="10"></div>
+        <div class="mini"><label>Time taken</label><input name="time_taken" placeholder="08:00"></div>
+        <div class="mini"><label>Time observed</label><input name="time_obs" placeholder="12:00"></div>
+        <div class="mini"><label>Hours since</label><input name="hrs_since" placeholder="4"></div>
+      </div>
+
+      <div class="grid2" style="margin-top:6px;">
+        <div class="mini"><label>Fluoxetine mg</label><input name="fluox_mg" placeholder="40"></div>
+        <div class="mini"><label>Olanzapine mg</label><input name="olanz_mg" placeholder="7.5"></div>
+      </div>
+
+      <div class="grid3" style="margin-top:6px;">
+        <div class="mini"><label>Fatigue (0–3)</label><input name="fatigue" placeholder="0"></div>
+        <div class="mini"><label>Activation (0–3)</label><input name="activation" placeholder="0"></div>
+        <div class="mini"><label>GI (0–3)</label><input name="gi" placeholder="0"></div>
+      </div>
+    </div>
+
+    <!-- AROUSAL (0–4) -->
+    <div class="section">
+      <div class="stitle">2) Arousal regulation (0–4)</div>
+      <div class="grid4">
+        <div class="mini"><label>Intensity</label><input name="ar_intensity" placeholder="0"></div>
+        <div class="mini"><label>Escalation</label><input name="ar_escalation" placeholder="0"></div>
+        <div class="mini"><label>Recovery</label><input name="ar_recovery" placeholder="0"></div>
+        <div class="mini"><label>Physical activation</label><input name="ar_physical" placeholder="0"></div>
+      </div>
+    </div>
+
+    <!-- EXECUTIVE (0–4) -->
+    <div class="section">
+      <div class="stitle">3) Executive stability (0–4)</div>
+      <div class="grid4">
+        <div class="mini"><label>Initiation</label><input name="ex_init" placeholder="0"></div>
+        <div class="mini"><label>Completion</label><input name="ex_comp" placeholder="0"></div>
+        <div class="mini"><label>Flexibility</label><input name="ex_flex" placeholder="0"></div>
+        <div class="mini"><label>Working memory</label><input name="ex_wm" placeholder="0"></div>
+      </div>
+    </div>
+
+    <!-- MOTOR / REPETITION -->
+    <div class="section">
+      <div class="stitle">4) Motor & repetition (counts)</div>
+      <div class="grid4">
+        <div class="mini"><label>Walk episodes (&gt;5m)</label><input name="walk_eps" placeholder="0"></div>
+        <div class="mini"><label>Longest walk (min)</label><input name="walk_long" placeholder="0"></div>
+        <div class="mini"><label>Directive repeats (&gt;3)</label><input name="rep_dir" placeholder="0"></div>
+        <div class="mini"><label>Resume after cue</label><input name="resume_cue" placeholder="0"></div>
+      </div>
+    </div>
+
+    <!-- COMMUNICATION -->
+    <div class="section">
+      <div class="stitle">5) Communication pattern</div>
+      <div class="grid3">
+        <div class="mini"><label>Interruptions (&gt;5/day)</label><input name="interruptions" placeholder="0"></div>
+        <div class="mini">
+          <label>Continuous talk (&gt;5m)</label>
+          <div class="yn"><select name="talk5">
+            <option value=""></option><option>Yes</option><option>No</option>
+          </select></div>
+        </div>
+        <div class="mini">
+          <label>Reciprocal exchange</label>
+          <div class="yn"><select name="recip">
+            <option value=""></option><option>Yes</option><option>No</option>
+          </select></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- THOUGHT/PERCEPTION STABILITY -->
+    <div class="section">
+      <div class="stitle">6) Thought / perception stability</div>
+      <div class="grid3">
+        <div class="mini">
+          <label>External voice</label>
+          <div class="yn"><select name="voice_ext">
+            <option value=""></option><option>Yes</option><option>No</option>
+          </select></div>
+        </div>
+        <div class="mini"><label>Suspicion (0–4)</label><input name="suspicion" placeholder="0"></div>
+        <div class="mini">
+          <label>Reality testing issue</label>
+          <div class="yn"><select name="reality">
+            <option value=""></option><option>Yes</option><option>No</option>
+          </select></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTEXT -->
+    <div class="section">
+      <div class="stitle">7) Context modifiers</div>
+      <div class="grid2">
+        <div class="mini"><label>Sleep quality (0–4)</label><input name="sleep_q" placeholder="0"></div>
+        <div class="mini"><label>Stress load (0–4)</label><input name="stress" placeholder="0"></div>
+      </div>
+    </div>
+
+    <!-- PHYSICAL SAFETY -->
+    <div class="section">
+      <div class="stitle">8) Physical safety</div>
+      <div class="grid3">
+        <div class="mini"><label>BP</label><input name="bp" placeholder="e.g., 128/76"></div>
+        <div class="mini"><label>Pulse</label><input name="pulse" placeholder="e.g., 72"></div>
+        <div class="mini"><label>Observer</label><input name="observer" placeholder="Name"></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="field"><label>Signature</label><input name="sig" placeholder="__________"></div>
+      <div class="field"><label>Clinic</label><input name="clinic" placeholder="GP / Home"></div>
+    </div>
+  </form>
 </main>
 
 <script>
-  function buildTemplateHTML(){
-    const nums = Array.from({length:11}, (_,i)=>`<span class="num">${i}</span>`).join("");
-    return `
-      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:6px;">
-        <div>
-          <div style="font-weight:900;font-size:18px;">السجل اليومي</div>
-          <div style="font-size:12px;color:#444;">تُملأ بالقلم بعد الطباعة</div>
-        </div>
-        <div style="font-size:12px;color:#444;text-align:left;">GP / Specialist</div>
-      </div>
+  // Clear
+  document.getElementById("btnClear").addEventListener("click", () => {
+    if (!confirm("Clear all fields?")) return;
+    document.getElementById("form").reset();
+  });
 
-      <div class="hdr">
-        <div class="lineBox"><b>الاسم</b><span class="line"></span></div>
-        <div class="lineBox"><b>التاريخ</b><span class="line"></span></div>
-        <div class="lineBox"><b>ساعات النوم</b><span class="line"></span></div>
-      </div>
-
-      <div class="sec">
-        <div class="secTitle">الدواء اليوم (مع الجرعة)</div>
-        <div class="grid2">
-          <div class="medRow"><span class="cb"></span> فلوكستين — الجرعة: <span class="doseLine"></span></div>
-          <div class="medRow"><span class="cb"></span> أولانزابين — الجرعة: <span class="doseLine"></span></div>
-          <div class="medRow" style="grid-column:1/-1;"><span class="cb"></span> أتوموكسيتين — الجرعة: <span class="doseLine"></span></div>
-        </div>
-      </div>
-
-      <div class="sec">
-        <div class="secTitle">المشاعر</div>
-        <div class="grid3">
-          <div class="opt"><span class="cb"></span> مستقرة</div>
-          <div class="opt"><span class="cb"></span> أقوى من المعتاد</div>
-          <div class="opt"><span class="cb"></span> قوية ومؤثرة</div>
-
-          <div class="opt"><span class="cb"></span> ببطء</div>
-          <div class="opt"><span class="cb"></span> بسرعة</div>
-          <div class="opt"><span class="cb"></span> فوراً</div>
-
-          <div class="opt"><span class="cb"></span> أهدأ بسرعة</div>
-          <div class="opt"><span class="cb"></span> أهدأ بعد وقت</div>
-          <div class="opt"><span class="cb"></span> بقيت منفعلة</div>
-        </div>
-      </div>
-
-      <div class="sec">
-        <div class="secTitle">المهام</div>
-        <div class="grid3">
-          <div class="opt"><span class="cb"></span> بدأت بسهولة</div>
-          <div class="opt"><span class="cb"></span> احتجت دفعة</div>
-          <div class="opt"><span class="cb"></span> لم أبدأ</div>
-
-          <div class="opt"><span class="cb"></span> أكملت</div>
-          <div class="opt"><span class="cb"></span> أكملت جزء</div>
-          <div class="opt"><span class="cb"></span> لم أكمل</div>
-
-          <div class="opt"><span class="cb"></span> عدت بسهولة</div>
-          <div class="opt"><span class="cb"></span> ترددت</div>
-          <div class="opt"><span class="cb"></span> تركت الخطة</div>
-        </div>
-      </div>
-
-      <div class="sec">
-        <div class="secTitle">المشي</div>
-        <div class="grid3">
-          <div class="opt"><span class="cb"></span> طبيعي</div>
-          <div class="opt"><span class="cb"></span> أكثر من المعتاد</div>
-          <div class="opt"><span class="cb"></span> كثير رغم الألم</div>
-
-          <div class="opt"><span class="cb"></span> جلست بسهولة</div>
-          <div class="opt"><span class="cb"></span> جلست قليلاً</div>
-          <div class="opt"><span class="cb"></span> لم أستطع البقاء</div>
-        </div>
-        <div class="painRow">
-          <div><b>ألم الساق:</b></div>
-          <div class="painScale">${nums}</div>
-        </div>
-      </div>
-
-      <div class="sec">
-        <div class="secTitle">الكلام</div>
-        <div class="grid3">
-          <div class="opt"><span class="cb"></span> حديث متبادل</div>
-          <div class="opt"><span class="cb"></span> تكلمت أكثر</div>
-          <div class="opt"><span class="cb"></span> بدون توقف</div>
-
-          <div class="opt"><span class="cb"></span> شرحت السبب</div>
-          <div class="opt"><span class="cb"></span> لم أشرح السبب</div>
-          <div class="opt"><span class="cb"></span> بدون وقت/خطة</div>
-        </div>
-      </div>
-
-      <div class="sec">
-        <div class="secTitle">الأفكار</div>
-        <div class="grid3">
-          <div class="opt"><span class="cb"></span> لا يوجد</div>
-          <div class="opt"><span class="cb"></span> أفكار قوية داخلي</div>
-          <div class="opt"><span class="cb"></span> صوت واضح خارجي</div>
-
-          <div class="opt"><span class="cb"></span> شك: لا يوجد</div>
-          <div class="opt"><span class="cb"></span> فكرة عابرة</div>
-          <div class="opt"><span class="cb"></span> واضح ومؤثر</div>
-        </div>
-      </div>
-
-      <div class="sec">
-        <div class="secTitle">النوم + نهاية اليوم</div>
-        <div class="grid3">
-          <div class="opt"><span class="cb"></span> نوم جيد</div>
-          <div class="opt"><span class="cb"></span> استيقظت مرة</div>
-          <div class="opt"><span class="cb"></span> متقطع/قصير</div>
-
-          <div class="opt"><span class="cb"></span> أفضل من أمس</div>
-          <div class="opt"><span class="cb"></span> نفس أمس</div>
-          <div class="opt"><span class="cb"></span> أصعب من أمس</div>
-        </div>
-
-        <div class="footerLine">
-          <div>التوقيع: __________________</div>
-          <div>ملاحظة قصيرة: __________________</div>
-        </div>
-      </div>
-    `;
-  }
-
-  // render preview
-  document.getElementById("preview").innerHTML = buildTemplateHTML();
-
+  // Print (reliable): create a print-only window, convert inputs to text, auto-fit to 1 A4 page
   function printOnePage(){
-    // Compact print CSS to guarantee no clipping on mobile
-    const printCSS = `
-      @page { size: A4; margin: 0; }
-      body { margin:0; font-family: Arial, Tahoma, sans-serif; background:#fff; direction: rtl; }
-      .page { width:210mm; height:297mm; padding:10mm; overflow:hidden; box-sizing:border-box; }
-      /* compact rules */
-      .hdr{ font-size:12px; }
-      .sec{ margin:6px 0; padding:6px 8px; }
-      .secTitle{ font-size:13px; margin-bottom:4px; }
-      .opt{ min-height:28px; padding:5px 6px; font-size:12px; }
-      .medRow{ min-height:28px; padding:5px 6px; font-size:12px; }
-      .lineBox{ min-height:32px; padding:6px 8px; }
-      .num{ font-size:11px; padding:1px 5px; }
-      .footerLine{ font-size:11px; }
-    `;
+    const form = document.getElementById("form");
 
-    const html = `
-      <!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Print</title>
-      <style>${printCSS}</style>
-      </head>
-      <body>
-        <div class="page">${buildTemplateHTML()}</div>
-        <script>
-          window.onload = function(){ setTimeout(function(){ window.print(); }, 250); };
-        <\/script>
-      </body></html>
-    `;
+    // Clone sheet as HTML
+    const clone = form.cloneNode(true);
+
+    // Convert form controls to plain text boxes to print reliably
+    clone.querySelectorAll("input, select").forEach(el => {
+      const v = (el.tagName === "SELECT") ? (el.value || "") : (el.value || "");
+      const span = document.createElement("span");
+      span.textContent = v;
+      span.style.display = "inline-block";
+      span.style.minWidth = "80px";
+      span.style.borderBottom = "1px solid #777";
+      span.style.padding = "0 6px";
+      span.style.textAlign = "left";
+      span.style.fontSize = "12px";
+      el.replaceWith(span);
+    });
+
+    // Remove button behaviour etc (none inside sheet)
+    clone.removeAttribute("id");
+
+    const printHTML = `
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Print</title>
+<style>
+  @page { size: A4; margin: 0; }
+  body { margin:0; background:#fff; font-family: Arial, Tahoma, sans-serif; }
+  .page { width:210mm; height:297mm; padding:10mm; overflow:hidden; }
+  .fit { transform-origin: top left; }
+  /* keep the same look */
+  *{ box-sizing:border-box; }
+  .sheet{
+    width:100%;
+    height:100%;
+    padding:0;
+    border:none;
+    box-shadow:none;
+    overflow:hidden;
+  }
+  /* reuse key CSS from the preview by inlining a minimal set */
+  .hrow{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+  .h1{font-weight:900;font-size:16px}
+  .note{font-size:11px;color:#444;text-align:right}
+  .grid3{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:6px;margin:6px 0 8px}
+  .field{border:1px solid #eee;border-radius:10px;padding:6px 8px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;background:#fff}
+  .section{border:1px solid #eee;border-radius:12px;padding:7px 8px;margin:6px 0}
+  .stitle{font-weight:900;font-size:12.5px;margin-bottom:4px;display:flex;justify-content:space-between;gap:10px}
+  .sdesc{font-size:11px;color:#444;margin-top:2px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px}
+  .mini{border:1px solid #f0f0f0;border-radius:10px;padding:6px 8px;font-size:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff}
+  .mini label{color:#444;font-weight:700;white-space:nowrap}
+  .footer{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+</style>
+</head>
+<body>
+  <div class="page">
+    <div id="fit" class="fit">${clone.outerHTML}</div>
+  </div>
+
+<script>
+  function fitToPage(){
+    const page = document.querySelector('.page');
+    const fit = document.getElementById('fit');
+    fit.style.transform = 'scale(1)';
+    const rect = fit.getBoundingClientRect();
+    const scaleW = page.clientWidth / rect.width;
+    const scaleH = page.clientHeight / rect.height;
+    const scale = Math.min(1, scaleW, scaleH);
+    fit.style.transform = 'scale(' + (scale - 0.01) + ')';
+  }
+  window.onload = function(){
+    setTimeout(function(){
+      fitToPage();
+      setTimeout(function(){ window.print(); }, 200);
+    }, 100);
+  };
+<\/script>
+</body>
+</html>`;
 
     const w = window.open("", "_blank");
-    if(!w){
-      alert("الطباعة تحتاج السماح بالنوافذ المنبثقة (Pop-ups).");
+    if (!w){
+      alert("Pop-ups blocked. Allow pop-ups to print.");
       return;
     }
     w.document.open();
-    w.document.write(html);
+    w.document.write(printHTML);
     w.document.close();
   }
 
