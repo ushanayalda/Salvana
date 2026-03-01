@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>السجل اليومي – سلفانا (v1.0)</title>
+<style>
+  :root{ --font: Arial, Tahoma, sans-serif; --ink:#111; --muted:#444; --bd:#ddd; --bg:#fff; --panel:#f3f3f3; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:var(--font); background:var(--panel); color:var(--ink); }
+  header{ position:sticky; top:0; background:#fff; border-bottom:1px solid var(--bd); padding:10px 12px; z-index:10; }
+  .topbar{ max-width:1100px; margin:0 auto; display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+  .title{ font-weight:900; font-size:16px; }
+  .controls{ display:flex; gap:8px; flex-wrap:wrap; }
+  button{ border:1px solid var(--bd); background:#fff; padding:10px 12px; border-radius:10px; cursor:pointer; font-family:var(--font); font-size:14px; }
+  button:hover{ background:#fafafa; }
+  a.nav{ text-decoration:none; color:#111; border:1px solid var(--bd); padding:10px 12px; border-radius:10px; background:#fff; font-size:14px; }
+
+  main{ display:flex; justify-content:center; padding:14px; }
+
+  /* A4 sheet */
+  .sheet{
+    width:210mm; height:297mm;
+    background:var(--bg);
+    border:1px solid var(--bd);
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
+    padding:8mm;
+    overflow:hidden;
+  }
+
+  .hdr{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:6px; }
+  .hdr .h1{ font-weight:900; font-size:15px; }
+  .hdr .h2{ font-size:11px; color:var(--muted); text-align:left; }
+
+  .grid3{ display:grid; grid-template-columns:1.2fr 1fr 0.8fr; gap:6px; margin:6px 0 8px; }
+  .cell{ border:1px solid #eee; border-radius:8px; padding:6px 8px; display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:12px; background:#fff; }
+  .cell label{ color:var(--muted); font-weight:700; white-space:nowrap; }
+  input, select{
+    width:60%;
+    border:1px solid #ddd; border-radius:6px; padding:5px 6px;
+    font-size:12px; outline:none; background:#fff;
+  }
+
+  .sec{ border:1px solid #eee; border-radius:10px; padding:6px 8px; margin:6px 0; background:#fff; }
+  .st{ font-weight:900; font-size:12.5px; margin-bottom:4px; display:flex; justify-content:space-between; }
+  .st span{ font-weight:400; font-size:11px; color:var(--muted); }
+
+  .row3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin:4px 0; }
+  .opt{ border:1px solid #f0f0f0; border-radius:8px; padding:6px 8px; display:flex; gap:8px; align-items:flex-start; font-size:12px; min-height:30px; }
+  .opt input{ width:auto; margin-top:2px; }
+  .pain{ display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; margin-top:4px; font-size:12px; }
+  .nums{ display:flex; gap:4px; flex-wrap:wrap; }
+  .nums label{ border:1px solid #ddd; border-radius:999px; padding:1px 6px; font-size:11px; display:flex; gap:4px; align-items:center; }
+  .nums input{ width:auto; margin:0; }
+  textarea{
+    width:100%; border:1px solid #ddd; border-radius:8px; padding:6px 8px;
+    font-size:12px; min-height:34px; resize:none; margin-top:4px;
+  }
+
+  @media print{ header, main{ display:none !important; } }
+</style>
+</head>
+
+<body>
+<header>
+  <div class="topbar">
+    <div class="title">السجل اليومي – سلفانا (v1.0)</div>
+    <div class="controls">
+      <a class="nav" href="index.html">⬅︎ رجوع</a>
+      <button type="button" id="btnPrint">🖨️ طباعة (A4 صفحة واحدة)</button>
+      <button type="button" id="btnClear">🧹 مسح</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <form class="sheet" id="form" autocomplete="off">
+    <div class="hdr">
+      <div>
+        <div class="h1">السجل اليومي</div>
+        <div class="h2">يُملأ يومياً • إجابات بسيطة • بدون تفسير</div>
+      </div>
+      <div class="h2">GP / Specialist Review</div>
+    </div>
+
+    <div class="grid3">
+      <div class="cell"><label>الاسم</label><input name="name" placeholder="سلفانا"></div>
+      <div class="cell"><label>التاريخ</label><input name="date" placeholder="DD/MM/YYYY"></div>
+      <div class="cell"><label>ساعات النوم</label><input name="sleep_hours" placeholder="مثال: 7"></div>
+    </div>
+
+    <div class="sec">
+      <div class="st">💊 الدواء (مع الجرعة) <span>ضع/ي علامة + اكتب/ي الجرعة</span></div>
+      <div class="row3">
+        <div class="opt"><input type="checkbox" name="med_fluox"><div>فلوكستين — الجرعة: <input name="dose_fluox" placeholder="40mg"></div></div>
+        <div class="opt"><input type="checkbox" name="med_olanz"><div>أولانزابين — الجرعة: <input name="dose_olanz" placeholder="7.5mg"></div></div>
+        <div class="opt"><input type="checkbox" name="med_atom"><div>أتوموكسيتين — الجرعة: <input name="dose_atom" placeholder="10mg"></div></div>
+      </div>
+
+      <div class="st" style="margin-top:6px;">بعد الدواء <span>اختر/ي واحداً</span></div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="post_med" value="no_change">لا فرق واضح</label>
+        <label class="opt"><input type="radio" name="post_med" value="slight_shift">تغير بسيط بالطاقة</label>
+        <label class="opt"><input type="radio" name="post_med" value="clear_change">تغير واضح (نشاط/تعب)</label>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="st">🌡 المشاعر <span>اختر/ي واحداً لكل سطر</span></div>
+
+      <div class="st" style="margin-top:0;">شدة المشاعر</div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="emo_intensity" value="stable">مستقرة</label>
+        <label class="opt"><input type="radio" name="emo_intensity" value="stronger">أقوى من المعتاد</label>
+        <label class="opt"><input type="radio" name="emo_intensity" value="disruptive">قوية ومؤثرة</label>
+      </div>
+
+      <div class="st">سرعة الانفعال</div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="emo_speed" value="gradual">ببطء</label>
+        <label class="opt"><input type="radio" name="emo_speed" value="fast">بسرعة</label>
+        <label class="opt"><input type="radio" name="emo_speed" value="immediate">فوراً</label>
+      </div>
+
+      <div class="st">بعد الانفعال</div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="emo_recovery" value="quick">أهدأ بسرعة</label>
+        <label class="opt"><input type="radio" name="emo_recovery" value="time">أهدأ بعد وقت</label>
+        <label class="opt"><input type="radio" name="emo_recovery" value="stays">بقيت منفعلة</label>
+      </div>
+
+      <div class="st">توتر جسدي</div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="body_tension" value="none">لا يوجد</label>
+        <label class="opt"><input type="radio" name="body_tension" value="mild">بسيط</label>
+        <label class="opt"><input type="radio" name="body_tension" value="clear">واضح</label>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="st">✔ المهام <span>اختر/ي واحداً لكل سطر</span></div>
+
+      <div class="st" style="margin-top:0;">بدء المهام</div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="task_start" value="easy">بدأت بسهولة</label>
+        <label class="opt"><input type="radio" name="task_start" value="push">احتجت دفعة</label>
+        <label class="opt"><input type="radio" name="task_start" value="unable">لم أبدأ</label>
+      </div>
+
+      <div class="st">إكمال المهام</div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="task_finish" value="done">أكملت</label>
+        <label class="opt"><input type="radio" name="task_finish" value="partial">أكملت جزء</label>
+        <label class="opt"><input type="radio" name="task_finish" value="abandoned">لم أكمل</label>
+      </div>
+
+      <div class="st">عند المقاطعة</div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="task_flex" value="return">عدت بسهولة</label>
+        <label class="opt"><input type="radio" name="task_flex" value="hesitate">ترددت</label>
+        <label class="opt"><input type="radio" name="task_flex" value="drop">تركت الخطة</label>
+      </div>
+
+      <div class="st">تذكّر ما كنت أفعله</div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="memory" value="easy">تذكرت بسهولة</label>
+        <label class="opt"><input type="radio" name="memory" value="reminder">احتجت تذكير</label>
+        <label class="opt"><input type="radio" name="memory" value="forgot">نسيت تماماً</label>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="st">🚶 المشي <span>اختر/ي واحداً لكل سطر</span></div>
+
+      <div class="st" style="margin-top:0;">المشي</div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="walk" value="normal">طبيعي</label>
+        <label class="opt"><input type="radio" name="walk" value="more">أكثر من المعتاد</label>
+        <label class="opt"><input type="radio" name="walk" value="excessive">كثير رغم الألم</label>
+      </div>
+
+      <div class="st">عند الجلوس</div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="sit" value="ok">جلست بسهولة</label>
+        <label class="opt"><input type="radio" name="sit" value="brief">جلست قليلاً</label>
+        <label class="opt"><input type="radio" name="sit" value="cannot">لم أستطع البقاء</label>
+      </div>
+
+      <div class="pain">
+        <div><strong>ألم الساق (0–10):</strong></div>
+        <div class="nums">
+          ${Array.from({length:11}, (_,i)=>`
+            <label><input type="radio" name="legpain" value="${i}">${i}</label>
+          `).join("")}
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="st">💬 الكلام <span>اختر/ي واحداً لكل سطر</span></div>
+
+      <div class="st" style="margin-top:0;">طريقة الكلام</div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="speech" value="reciprocal">حديث متبادل</label>
+        <label class="opt"><input type="radio" name="speech" value="more">تكلمت أكثر</label>
+        <label class="opt"><input type="radio" name="speech" value="continuous">بدون توقف</label>
+      </div>
+
+      <div class="st">التوجيه للآخرين</div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="directive" value="explained">شرحت السبب</label>
+        <label class="opt"><input type="radio" name="directive" value="no_reason">لم أشرح السبب</label>
+        <label class="opt"><input type="radio" name="directive" value="no_plan">بدون وقت/خطة</label>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="st">🧠 الأفكار <span>اختر/ي واحداً لكل سطر</span></div>
+
+      <div class="st" style="margin-top:0;">الأصوات</div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="voices" value="none">لا يوجد</label>
+        <label class="opt"><input type="radio" name="voices" value="internal">أفكار قوية داخلي</label>
+        <label class="opt"><input type="radio" name="voices" value="external">صوت واضح خارجي</label>
+      </div>
+
+      <div class="st">الشك</div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="suspicion" value="none">لا يوجد</label>
+        <label class="opt"><input type="radio" name="suspicion" value="brief">فكرة عابرة</label>
+        <label class="opt"><input type="radio" name="suspicion" value="clear">واضح ومؤثر</label>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="st">🌙 النوم <span>اختر/ي واحداً</span></div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="sleep" value="good">جيد</label>
+        <label class="opt"><input type="radio" name="sleep" value="one">استيقظت مرة</label>
+        <label class="opt"><input type="radio" name="sleep" value="poor">متقطع/قصير</label>
+      </div>
+
+      <div class="st" style="margin-top:6px;">ضغط اليوم <span>اختر/ي واحداً</span></div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="stress" value="normal">عادي</label>
+        <label class="opt"><input type="radio" name="stress" value="mid">متوسط</label>
+        <label class="opt"><input type="radio" name="stress" value="high">عالي</label>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="st">❤️ الجسد <span>اختر/ي واحداً لكل سطر</span></div>
+      <div class="st" style="margin-top:0;">غثيان/معدة</div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="gi" value="none">لا يوجد</label>
+        <label class="opt"><input type="radio" name="gi" value="mild">بسيط</label>
+        <label class="opt"><input type="radio" name="gi" value="clear">واضح</label>
+      </div>
+      <div class="st">نشاط جسدي (زيادة/اندفاع)</div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="act" value="none">لا يوجد</label>
+        <label class="opt"><input type="radio" name="act" value="mild">بسيط</label>
+        <label class="opt"><input type="radio" name="act" value="marked">واضح</label>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="st">نهاية اليوم <span>اختر/ي واحداً</span></div>
+      <div class="row3">
+        <label class="opt"><input type="radio" name="end" value="better">أفضل من أمس</label>
+        <label class="opt"><input type="radio" name="end" value="same">نفس أمس</label>
+        <label class="opt"><input type="radio" name="end" value="harder">أصعب من أمس</label>
+      </div>
+
+      <div class="cell" style="margin-top:6px;">
+        <label>توقيع</label><input name="sig" placeholder="__________">
+      </div>
+    </div>
+  </form>
+</main>
+
+<script>
+  // Clear
+  document.getElementById("btnClear").addEventListener("click", () => {
+    if (!confirm("مسح كل الحقول؟")) return;
+    document.getElementById("form").reset();
+  });
+
+  // Print: convert controls to underlined text, auto-fit to 1 A4 page
+  function printOnePage(){
+    const form = document.getElementById("form");
+    const clone = form.cloneNode(true);
+
+    // replace inputs with underlined values
+    clone.querySelectorAll("input, select, textarea").forEach(el => {
+      if (el.type === "radio" || el.type === "checkbox"){
+        const mark = document.createElement("span");
+        mark.textContent = el.checked ? "☑" : "☐";
+        mark.style.fontSize = "12px";
+        el.replaceWith(mark);
+        return;
+      }
+      const v = el.value || "";
+      const span = document.createElement("span");
+      span.textContent = v;
+      span.style.display = "inline-block";
+      span.style.minWidth = "60px";
+      span.style.borderBottom = "1px solid #777";
+      span.style.padding = "0 6px";
+      span.style.fontSize = "12px";
+      el.replaceWith(span);
+    });
+
+    const printHTML = `
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Print</title>
+<style>
+  @page{ size:A4; margin:0; }
+  body{ margin:0; background:#fff; font-family: Arial, Tahoma, sans-serif; }
+  .page{ width:210mm; height:297mm; padding:8mm; overflow:hidden; }
+  .fit{ transform-origin: top left; }
+
+  *{ box-sizing:border-box; }
+  .sheet{ width:100%; height:100%; padding:0; border:none; box-shadow:none; overflow:hidden; }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div id="fit" class="fit">${clone.outerHTML}</div>
+  </div>
+<script>
+  function fitToPage(){
+    const page = document.querySelector('.page');
+    const fit = document.getElementById('fit');
+    fit.style.transform='scale(1)';
+    const r = fit.getBoundingClientRect();
+    const s = Math.min(1, page.clientWidth/r.width, page.clientHeight/r.height);
+    fit.style.transform='scale('+(s-0.01)+')';
+  }
+  window.onload=function(){
+    setTimeout(function(){ fitToPage(); setTimeout(function(){ window.print(); },200); },100);
+  };
+<\/script>
+</body>
+</html>`;
+
+    const w = window.open("", "_blank");
+    if (!w){ alert("الطباعة تحتاج السماح بالنوافذ المنبثقة (Pop-ups)."); return; }
+    w.document.open();
+    w.document.write(printHTML);
+    w.document.close();
+  }
+
+  document.getElementById("btnPrint").addEventListener("click", printOnePage);
+</script>
+</body>
+</html>
