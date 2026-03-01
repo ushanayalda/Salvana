@@ -1,174 +1,135 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Atomoxetine Monitoring – GP/Observer (1-page A4)</title>
-  <style>
-    :root{
-      --font: Arial, system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
-      --ink:#111;
-      --muted:#444;
-      --border:#ddd;
-      --bg:#fff;
-      --panel:#f3f3f3;
-    }
-    *{ box-sizing:border-box; }
-    body{
-      margin:0;
-      font-family:var(--font);
-      background:var(--panel);
-      color:var(--ink);
-    }
-    header{
-      position:sticky; top:0; z-index:10;
-      background:#fff;
-      border-bottom:1px solid var(--border);
-      padding:10px 12px;
-    }
-    .topbar{
-      max-width:1100px;
-      margin:0 auto;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .title{ font-weight:900; font-size:16px; }
-    .controls{ display:flex; gap:8px; flex-wrap:wrap; }
-    button{
-      border:1px solid var(--border);
-      background:#fff;
-      padding:10px 12px;
-      border-radius:10px;
-      font-family:var(--font);
-      font-size:14px;
-      cursor:pointer;
-    }
-    button:hover{ background:#fafafa; }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Atomoxetine Monitoring – GP/Observer (A4 1-page)</title>
+<style>
+  :root{
+    --font: Arial, Tahoma, sans-serif;
+    --ink:#111; --muted:#444; --b:#cfcfcf; --bg:#fff; --panel:#f3f3f3;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:var(--font); background:var(--panel); color:var(--ink); }
+  header{
+    position:sticky; top:0; z-index:10;
+    background:#fff; border-bottom:1px solid #ddd;
+    padding:10px 12px;
+  }
+  .topbar{
+    max-width:1100px; margin:0 auto;
+    display:flex; gap:10px; flex-wrap:wrap;
+    align-items:center; justify-content:space-between;
+  }
+  .title{ font-weight:900; font-size:16px; }
+  .controls{ display:flex; gap:8px; flex-wrap:wrap; }
+  button{
+    border:1px solid #ddd; background:#fff;
+    padding:10px 12px; border-radius:10px;
+    cursor:pointer; font-family:var(--font); font-size:14px;
+  }
+  button:hover{ background:#fafafa; }
+  main{ display:flex; justify-content:center; padding:14px; }
 
-    main{ display:flex; justify-content:center; padding:14px; }
+  /* A4 preview */
+  .sheet{
+    width:210mm; height:297mm;
+    background:var(--bg);
+    border:1px solid #ddd;
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
+    padding:8mm;
+    overflow:hidden; /* prevent spill */
+  }
 
-    /* Preview sheet */
-    .sheet{
-      width:210mm;
-      height:297mm;      /* lock to A4 */
-      background:var(--bg);
-      border:1px solid var(--border);
-      box-shadow:0 8px 18px rgba(0,0,0,.08);
-      padding:10mm;
-      overflow:hidden;   /* no spill */
-    }
+  /* High-density clinical layout */
+  .hdr{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    gap:10px; margin-bottom:6px;
+  }
+  .hdr .h1{ font-weight:900; font-size:15px; }
+  .hdr .h2{ font-size:11px; color:var(--muted); text-align:right; }
 
-    /* Compact layout */
-    .hrow{
-      display:flex; justify-content:space-between; align-items:flex-start;
-      gap:10px; margin-bottom:6px;
-    }
-    .hrow .h1{ font-weight:900; font-size:16px; }
-    .hrow .note{ font-size:11px; color:var(--muted); text-align:right; }
+  .grid{
+    display:grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap:6px;
+    margin:6px 0 8px;
+  }
+  .cell{
+    border:1px solid #eee; border-radius:8px;
+    padding:6px 8px;
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    font-size:11.5px;
+    background:#fff;
+  }
+  .cell label{ color:var(--muted); font-weight:700; white-space:nowrap; }
+  input, select{
+    width:58%;
+    border:1px solid #ddd; border-radius:6px;
+    padding:5px 6px;
+    font-size:11.5px;
+    outline:none; background:#fff;
+  }
+  .w50{ width:50% !important; }
+  .w40{ width:40% !important; }
+  .w30{ width:30% !important; }
+  .w70{ width:70% !important; }
 
-    .grid3{
-      display:grid;
-      grid-template-columns: 1.2fr 1fr 1fr;
-      gap:6px;
-      margin:6px 0 8px;
-    }
-    .field{
-      border:1px solid #eee;
-      border-radius:10px;
-      padding:6px 8px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:8px;
-      font-size:12px;
-      background:#fff;
-    }
-    .field label{ color:var(--muted); font-weight:700; white-space:nowrap; }
-    .field input, .field select{
-      width:60%;
-      border:1px solid #ddd;
-      border-radius:8px;
-      padding:6px 8px;
-      font-size:12px;
-      outline:none;
-      background:#fff;
-    }
+  .sec{
+    border:1px solid #eee; border-radius:10px;
+    padding:6px 8px;
+    margin:6px 0;
+    background:#fff;
+  }
+  .secTitle{
+    font-weight:900; font-size:12px;
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom:4px;
+  }
+  .secTitle span{ font-weight:400; font-size:11px; color:var(--muted); }
 
-    .section{
-      border:1px solid #eee;
-      border-radius:12px;
-      padding:7px 8px;
-      margin:6px 0;
-    }
-    .stitle{
-      font-weight:900;
-      font-size:12.5px;
-      margin-bottom:4px;
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-    }
-    .sdesc{ font-size:11px; color:var(--muted); margin-top:2px; }
+  .row4{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap:6px;
+  }
+  .row3{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap:6px;
+  }
+  .row2{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:6px;
+  }
 
-    .grid2{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:6px;
-    }
-    .grid4{
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
-      gap:6px;
-    }
-    .mini{
-      border:1px solid #f0f0f0;
-      border-radius:10px;
-      padding:6px 8px;
-      font-size:12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:8px;
-      background:#fff;
-    }
-    .mini label{ color:var(--muted); font-weight:700; white-space:nowrap; }
-    .mini input, .mini select{
-      width:52%;
-      border:1px solid #ddd;
-      border-radius:8px;
-      padding:6px 8px;
-      font-size:12px;
-      background:#fff;
-    }
+  .mini{
+    border:1px solid #f0f0f0; border-radius:8px;
+    padding:6px 8px;
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    font-size:11.5px;
+    background:#fff;
+  }
+  .mini label{ color:var(--muted); font-weight:700; white-space:nowrap; }
+  .mini input, .mini select{ width:52%; }
 
-    .yn{
-      display:flex; gap:6px; align-items:center;
-      justify-content:flex-end;
-    }
-    .yn label{ font-size:12px; color:var(--muted); }
-    .yn select{ width:80px; }
+  .footer{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:6px;
+    margin-top:6px;
+  }
 
-    .footer{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:6px;
-      margin-top:6px;
-    }
-
-    /* Hide header when user prints the main page (we print via print-window anyway) */
-    @media print{
-      header, main{ display:none !important; }
-    }
-  </style>
+  /* Hide main UI when printing main page (printing uses print-window anyway) */
+  @media print{ header, main{ display:none !important; } }
+</style>
 </head>
 
 <body>
 <header>
   <div class="topbar">
-    <div class="title">Atomoxetine Monitoring – GP/Observer (1-page A4)</div>
+    <div class="title">Atomoxetine Monitoring – GP/Observer (3× weekly, 1-page A4)</div>
     <div class="controls">
       <button type="button" id="btnPrint">🖨️ Print (1 page)</button>
       <button type="button" id="btnClear">🧹 Clear</button>
@@ -178,47 +139,45 @@
 
 <main>
   <form class="sheet" id="form" autocomplete="off">
-    <div class="hrow">
+    <div class="hdr">
       <div>
         <div class="h1">Observer Log (3× weekly)</div>
-        <div class="note">Complete, then Print</div>
+        <div class="h2">Numeric only • Response + safety • No diagnostic labels</div>
       </div>
-      <div class="note">No diagnosis labels • Response + Safety</div>
+      <div class="h2">A4 single-page print</div>
     </div>
 
-    <!-- IDENTIFIERS -->
-    <div class="grid3">
-      <div class="field"><label>Patient</label><input name="patient" value="Salvana Aoshan"></div>
-      <div class="field"><label>Week #</label><input name="week" placeholder="e.g., 2"></div>
-      <div class="field"><label>Date</label><input name="date" placeholder="DD/MM/YYYY"></div>
+    <!-- Identifiers -->
+    <div class="grid">
+      <div class="cell"><label>Patient</label><input name="patient" value="Salvana Aoshan"></div>
+      <div class="cell"><label>Week #</label><input name="week" placeholder="e.g., 2"></div>
+      <div class="cell"><label>Date</label><input name="date" placeholder="DD/MM/YYYY"></div>
     </div>
 
-    <!-- MEDICATION STATE -->
-    <div class="section">
-      <div class="stitle">1) Medication state <span class="sdesc">dose + timing + side-effect signals</span></div>
-      <div class="grid4">
-        <div class="mini"><label>Atomoxetine mg</label><input name="atom_mg" placeholder="10"></div>
+    <!-- Medication state -->
+    <div class="sec">
+      <div class="secTitle">1) Medication state <span>Dose + timing + side-effect signals</span></div>
+      <div class="row4">
+        <div class="mini"><label>Atomox mg</label><input name="atom_mg" placeholder="10"></div>
         <div class="mini"><label>Time taken</label><input name="time_taken" placeholder="08:00"></div>
         <div class="mini"><label>Time observed</label><input name="time_obs" placeholder="12:00"></div>
-        <div class="mini"><label>Hours since</label><input name="hrs_since" placeholder="4"></div>
+        <div class="mini"><label>Hrs since</label><input name="hrs_since" placeholder="4"></div>
       </div>
-
-      <div class="grid2" style="margin-top:6px;">
-        <div class="mini"><label>Fluoxetine mg</label><input name="fluox_mg" placeholder="40"></div>
-        <div class="mini"><label>Olanzapine mg</label><input name="olanz_mg" placeholder="7.5"></div>
+      <div class="row2" style="margin-top:6px;">
+        <div class="mini"><label>Fluox mg</label><input name="fluox_mg" placeholder="40"></div>
+        <div class="mini"><label>Olanz mg</label><input name="olanz_mg" placeholder="7.5"></div>
       </div>
-
-      <div class="grid3" style="margin-top:6px;">
+      <div class="row3" style="margin-top:6px;">
         <div class="mini"><label>Fatigue (0–3)</label><input name="fatigue" placeholder="0"></div>
         <div class="mini"><label>Activation (0–3)</label><input name="activation" placeholder="0"></div>
         <div class="mini"><label>GI (0–3)</label><input name="gi" placeholder="0"></div>
       </div>
     </div>
 
-    <!-- AROUSAL (0–4) -->
-    <div class="section">
-      <div class="stitle">2) Arousal regulation (0–4)</div>
-      <div class="grid4">
+    <!-- Arousal regulation -->
+    <div class="sec">
+      <div class="secTitle">2) Arousal regulation (0–4) <span>0 Stable → 4 Severe</span></div>
+      <div class="row4">
         <div class="mini"><label>Intensity</label><input name="ar_intensity" placeholder="0"></div>
         <div class="mini"><label>Escalation</label><input name="ar_escalation" placeholder="0"></div>
         <div class="mini"><label>Recovery</label><input name="ar_recovery" placeholder="0"></div>
@@ -226,90 +185,78 @@
       </div>
     </div>
 
-    <!-- EXECUTIVE (0–4) -->
-    <div class="section">
-      <div class="stitle">3) Executive stability (0–4)</div>
-      <div class="grid4">
+    <!-- Executive stability -->
+    <div class="sec">
+      <div class="secTitle">3) Executive stability (0–4) <span>performance variability</span></div>
+      <div class="row4">
         <div class="mini"><label>Initiation</label><input name="ex_init" placeholder="0"></div>
         <div class="mini"><label>Completion</label><input name="ex_comp" placeholder="0"></div>
         <div class="mini"><label>Flexibility</label><input name="ex_flex" placeholder="0"></div>
-        <div class="mini"><label>Working memory</label><input name="ex_wm" placeholder="0"></div>
+        <div class="mini"><label>Work. memory</label><input name="ex_wm" placeholder="0"></div>
       </div>
     </div>
 
-    <!-- MOTOR / REPETITION -->
-    <div class="section">
-      <div class="stitle">4) Motor & repetition (counts)</div>
-      <div class="grid4">
-        <div class="mini"><label>Walk episodes (&gt;5m)</label><input name="walk_eps" placeholder="0"></div>
+    <!-- Motor & repetition -->
+    <div class="sec">
+      <div class="secTitle">4) Motor & repetition <span>counts / minutes</span></div>
+      <div class="row4">
+        <div class="mini"><label>Walk eps &gt;5m</label><input name="walk_eps" placeholder="0"></div>
         <div class="mini"><label>Longest walk (min)</label><input name="walk_long" placeholder="0"></div>
-        <div class="mini"><label>Directive repeats (&gt;3)</label><input name="rep_dir" placeholder="0"></div>
+        <div class="mini"><label>Directive repeats</label><input name="rep_dir" placeholder="0"></div>
         <div class="mini"><label>Resume after cue</label><input name="resume_cue" placeholder="0"></div>
       </div>
     </div>
 
-    <!-- COMMUNICATION -->
-    <div class="section">
-      <div class="stitle">5) Communication pattern</div>
-      <div class="grid3">
+    <!-- Communication -->
+    <div class="sec">
+      <div class="secTitle">5) Communication pattern <span>observable markers</span></div>
+      <div class="row3">
         <div class="mini"><label>Interruptions (&gt;5/day)</label><input name="interruptions" placeholder="0"></div>
-        <div class="mini">
-          <label>Continuous talk (&gt;5m)</label>
-          <div class="yn"><select name="talk5">
-            <option value=""></option><option>Yes</option><option>No</option>
-          </select></div>
+        <div class="mini"><label>Continuous talk (&gt;5m)</label>
+          <select name="talk5"><option value=""></option><option>Yes</option><option>No</option></select>
         </div>
-        <div class="mini">
-          <label>Reciprocal exchange</label>
-          <div class="yn"><select name="recip">
-            <option value=""></option><option>Yes</option><option>No</option>
-          </select></div>
+        <div class="mini"><label>Reciprocal exchange</label>
+          <select name="recip"><option value=""></option><option>Yes</option><option>No</option></select>
         </div>
       </div>
     </div>
 
-    <!-- THOUGHT/PERCEPTION STABILITY -->
-    <div class="section">
-      <div class="stitle">6) Thought / perception stability</div>
-      <div class="grid3">
-        <div class="mini">
-          <label>External voice</label>
-          <div class="yn"><select name="voice_ext">
-            <option value=""></option><option>Yes</option><option>No</option>
-          </select></div>
+    <!-- Thought/perception -->
+    <div class="sec">
+      <div class="secTitle">6) Thought/perception stability <span>safety screen</span></div>
+      <div class="row3">
+        <div class="mini"><label>External voice</label>
+          <select name="voice_ext"><option value=""></option><option>Yes</option><option>No</option></select>
         </div>
         <div class="mini"><label>Suspicion (0–4)</label><input name="suspicion" placeholder="0"></div>
-        <div class="mini">
-          <label>Reality testing issue</label>
-          <div class="yn"><select name="reality">
-            <option value=""></option><option>Yes</option><option>No</option>
-          </select></div>
+        <div class="mini"><label>Reality testing issue</label>
+          <select name="reality"><option value=""></option><option>Yes</option><option>No</option></select>
         </div>
       </div>
     </div>
 
-    <!-- CONTEXT -->
-    <div class="section">
-      <div class="stitle">7) Context modifiers</div>
-      <div class="grid2">
+    <!-- Context -->
+    <div class="sec">
+      <div class="secTitle">7) Context modifiers <span>control variables</span></div>
+      <div class="row2">
         <div class="mini"><label>Sleep quality (0–4)</label><input name="sleep_q" placeholder="0"></div>
         <div class="mini"><label>Stress load (0–4)</label><input name="stress" placeholder="0"></div>
       </div>
     </div>
 
-    <!-- PHYSICAL SAFETY -->
-    <div class="section">
-      <div class="stitle">8) Physical safety</div>
-      <div class="grid3">
-        <div class="mini"><label>BP</label><input name="bp" placeholder="e.g., 128/76"></div>
-        <div class="mini"><label>Pulse</label><input name="pulse" placeholder="e.g., 72"></div>
+    <!-- Physical safety -->
+    <div class="sec">
+      <div class="secTitle">8) Physical safety <span>3× weekly vitals</span></div>
+      <div class="row3">
+        <div class="mini"><label>BP</label><input name="bp" placeholder="128/76"></div>
+        <div class="mini"><label>Pulse</label><input name="pulse" placeholder="72"></div>
         <div class="mini"><label>Observer</label><input name="observer" placeholder="Name"></div>
       </div>
     </div>
 
     <div class="footer">
-      <div class="field"><label>Signature</label><input name="sig" placeholder="__________"></div>
-      <div class="field"><label>Clinic</label><input name="clinic" placeholder="GP / Home"></div>
+      <div class="cell"><label>Signature</label><input name="sig" placeholder="__________"></div>
+      <div class="cell"><label>Site</label><input name="site" placeholder="GP / Home"></div>
     </div>
   </form>
 </main>
@@ -321,64 +268,51 @@
     document.getElementById("form").reset();
   });
 
-  // Print (reliable): create a print-only window, convert inputs to text, auto-fit to 1 A4 page
+  // Print: print-only window + convert controls to text + auto-fit to 1 A4 page
   function printOnePage(){
     const form = document.getElementById("form");
-
-    // Clone sheet as HTML
     const clone = form.cloneNode(true);
 
-    // Convert form controls to plain text boxes to print reliably
+    // Replace inputs/selects with underlined text for reliable print
     clone.querySelectorAll("input, select").forEach(el => {
-      const v = (el.tagName === "SELECT") ? (el.value || "") : (el.value || "");
+      const value = (el.tagName === "SELECT") ? (el.value || "") : (el.value || "");
       const span = document.createElement("span");
-      span.textContent = v;
+      span.textContent = value;
       span.style.display = "inline-block";
-      span.style.minWidth = "80px";
+      span.style.minWidth = "70px";
       span.style.borderBottom = "1px solid #777";
       span.style.padding = "0 6px";
-      span.style.textAlign = "left";
-      span.style.fontSize = "12px";
+      span.style.fontSize = "11.5px";
       el.replaceWith(span);
     });
-
-    // Remove button behaviour etc (none inside sheet)
-    clone.removeAttribute("id");
 
     const printHTML = `
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Print</title>
 <style>
-  @page { size: A4; margin: 0; }
-  body { margin:0; background:#fff; font-family: Arial, Tahoma, sans-serif; }
-  .page { width:210mm; height:297mm; padding:10mm; overflow:hidden; }
-  .fit { transform-origin: top left; }
-  /* keep the same look */
+  @page{ size:A4; margin:0; }
+  body{ margin:0; background:#fff; font-family: Arial, Tahoma, sans-serif; }
+  .page{ width:210mm; height:297mm; padding:8mm; overflow:hidden; }
+  .fit{ transform-origin: top left; }
+
   *{ box-sizing:border-box; }
-  .sheet{
-    width:100%;
-    height:100%;
-    padding:0;
-    border:none;
-    box-shadow:none;
-    overflow:hidden;
-  }
-  /* reuse key CSS from the preview by inlining a minimal set */
-  .hrow{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
-  .h1{font-weight:900;font-size:16px}
-  .note{font-size:11px;color:#444;text-align:right}
-  .grid3{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:6px;margin:6px 0 8px}
-  .field{border:1px solid #eee;border-radius:10px;padding:6px 8px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;background:#fff}
-  .section{border:1px solid #eee;border-radius:12px;padding:7px 8px;margin:6px 0}
-  .stitle{font-weight:900;font-size:12.5px;margin-bottom:4px;display:flex;justify-content:space-between;gap:10px}
-  .sdesc{font-size:11px;color:#444;margin-top:2px}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-  .grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px}
-  .mini{border:1px solid #f0f0f0;border-radius:10px;padding:6px 8px;font-size:12px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff}
+  .sheet{ width:100%; height:100%; padding:0; border:none; box-shadow:none; overflow:hidden; }
+  .hdr{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px}
+  .h1{font-weight:900;font-size:15px}
+  .h2{font-size:11px;color:#444;text-align:right}
+  .grid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:6px;margin:6px 0 8px}
+  .cell{border:1px solid #eee;border-radius:8px;padding:6px 8px;display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11.5px;background:#fff}
+  .sec{border:1px solid #eee;border-radius:10px;padding:6px 8px;margin:6px 0;background:#fff}
+  .secTitle{font-weight:900;font-size:12px;display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+  .secTitle span{font-weight:400;font-size:11px;color:#444}
+  .row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .mini{border:1px solid #f0f0f0;border-radius:8px;padding:6px 8px;font-size:11.5px;display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff}
   .mini label{color:#444;font-weight:700;white-space:nowrap}
   .footer{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
 </style>
@@ -387,23 +321,17 @@
   <div class="page">
     <div id="fit" class="fit">${clone.outerHTML}</div>
   </div>
-
 <script>
   function fitToPage(){
     const page = document.querySelector('.page');
     const fit = document.getElementById('fit');
-    fit.style.transform = 'scale(1)';
-    const rect = fit.getBoundingClientRect();
-    const scaleW = page.clientWidth / rect.width;
-    const scaleH = page.clientHeight / rect.height;
-    const scale = Math.min(1, scaleW, scaleH);
-    fit.style.transform = 'scale(' + (scale - 0.01) + ')';
+    fit.style.transform='scale(1)';
+    const r = fit.getBoundingClientRect();
+    const s = Math.min(1, page.clientWidth/r.width, page.clientHeight/r.height);
+    fit.style.transform='scale('+(s-0.01)+')';
   }
-  window.onload = function(){
-    setTimeout(function(){
-      fitToPage();
-      setTimeout(function(){ window.print(); }, 200);
-    }, 100);
+  window.onload=function(){
+    setTimeout(function(){ fitToPage(); setTimeout(function(){ window.print(); },200); },100);
   };
 <\/script>
 </body>
