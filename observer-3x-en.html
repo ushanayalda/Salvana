@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Observer Log (3× weekly) – Atomoxetine (A4 1-page)</title>
+<style>
+  :root{
+    --font: Arial, Tahoma, sans-serif;
+    --ink:#111; --muted:#444; --bd:#ddd; --bg:#fff; --panel:#f3f3f3;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:var(--font); background:var(--panel); color:var(--ink); }
+  header{
+    position:sticky; top:0; z-index:10;
+    background:#fff; border-bottom:1px solid var(--bd);
+    padding:10px 12px;
+  }
+  .topbar{
+    max-width:1100px; margin:0 auto;
+    display:flex; gap:10px; flex-wrap:wrap;
+    align-items:center; justify-content:space-between;
+  }
+  .title{ font-weight:900; font-size:16px; }
+  .controls{ display:flex; gap:8px; flex-wrap:wrap; }
+  button, a.nav{
+    border:1px solid var(--bd);
+    background:#fff;
+    padding:10px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    font-family:var(--font);
+    font-size:14px;
+    text-decoration:none;
+    color:#111;
+    display:inline-block;
+  }
+  button:hover, a.nav:hover{ background:#fafafa; }
+
+  main{ display:flex; justify-content:center; padding:14px; }
+
+  .sheet{
+    width:210mm; height:297mm;
+    background:var(--bg);
+    border:1px solid var(--bd);
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
+    padding:8mm;
+    overflow:hidden;
+  }
+
+  .hdr{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    gap:10px; margin-bottom:6px;
+  }
+  .h1{ font-weight:900; font-size:15px; }
+  .h2{ font-size:11px; color:var(--muted); text-align:right; }
+
+  .grid3{
+    display:grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap:6px;
+    margin:6px 0 8px;
+  }
+  .cell{
+    border:1px solid #eee; border-radius:8px;
+    padding:6px 8px;
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    font-size:11.5px;
+    background:#fff;
+  }
+  .cell label{ color:var(--muted); font-weight:700; white-space:nowrap; }
+  input, select{
+    width:58%;
+    border:1px solid #ddd; border-radius:6px;
+    padding:5px 6px;
+    font-size:11.5px;
+    outline:none; background:#fff;
+  }
+
+  .sec{
+    border:1px solid #eee; border-radius:10px;
+    padding:6px 8px;
+    margin:6px 0;
+    background:#fff;
+  }
+  .secTitle{
+    font-weight:900; font-size:12px;
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom:4px;
+  }
+  .secTitle span{ font-weight:400; font-size:11px; color:var(--muted); }
+
+  .row4{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap:6px;
+  }
+  .row3{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap:6px;
+  }
+  .row2{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:6px;
+  }
+  .mini{
+    border:1px solid #f0f0f0; border-radius:8px;
+    padding:6px 8px;
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    font-size:11.5px;
+    background:#fff;
+  }
+  .mini label{ color:var(--muted); font-weight:700; white-space:nowrap; }
+  .mini input, .mini select{ width:52%; }
+
+  .footer{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:6px;
+    margin-top:6px;
+  }
+
+  @media print{ header, main{ display:none !important; } }
+</style>
+</head>
+
+<body>
+<header>
+  <div class="topbar">
+    <div class="title">Observer Log (3× weekly) – Atomoxetine (1-page A4)</div>
+    <div class="controls">
+      <a class="nav" href="index.html">⬅︎ Home</a>
+      <button type="button" id="btnPrint">🖨️ Print (1 page)</button>
+      <button type="button" id="btnClear">🧹 Clear</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <form class="sheet" id="form" autocomplete="off">
+    <div class="hdr">
+      <div>
+        <div class="h1">Observer Log (3× weekly)</div>
+        <div class="h2">Numeric only • No diagnostic labels • Dose/time correlation</div>
+      </div>
+      <div class="h2">A4 single-page print</div>
+    </div>
+
+    <div class="grid3">
+      <div class="cell"><label>Patient</label><input name="patient" value="Salvana Aoshan"></div>
+      <div class="cell"><label>Week #</label><input name="week" placeholder="e.g., 2"></div>
+      <div class="cell"><label>Date</label><input name="date" placeholder="DD/MM/YYYY"></div>
+    </div>
+
+    <div class="sec">
+      <div class="secTitle">1) Medication state <span>dose + timing + side-effect signals</span></div>
+      <div class="row4">
+        <div class="mini"><label>Atomox mg</label><input name="atom_mg" placeholder="10"></div>
+        <div class="mini"><label>Time taken</label><input name="time_taken" placeholder="08:00"></div>
+        <div class="mini"><label>Time observed</label><input name="time_obs" placeholder="12:00"></div>
+        <div class="mini"><label>Hrs since</label><input name="hrs_since" placeholder="4"></div>
+      </div>
+      <div class="row2" style="margin-top:6px;">
+        <div class="mini"><label>Fluox mg</label><input name="fluox_mg" placeholder="40"></div>
+        <div class="mini"><label>Olanz mg</label><input name="olanz_mg" placeholder="7.5"></div>
+      </div>
+      <div class="row3" style="margin-top:6px;">
+        <div class="mini"><label>Fatigue (0–3)</label><input name="fatigue" placeholder="0"></div>
+        <div class="mini"><label>Activation (0–3)</label><input name="activation" placeholder="0"></div>
+        <div class="mini"><label>GI (0–3)</label><input name="gi" placeholder="0"></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="secTitle">2) Arousal regulation (0–4) <span>0 Stable → 4 Severe</span></div>
+      <div class="row4">
+        <div class="mini"><label>Intensity</label><input name="ar_intensity" placeholder="0"></div>
+        <div class="mini"><label>Escalation</label><input name="ar_escalation" placeholder="0"></div>
+        <div class="mini"><label>Recovery</label><input name="ar_recovery" placeholder="0"></div>
+        <div class="mini"><label>Physical activation</label><input name="ar_physical" placeholder="0"></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="secTitle">3) Executive stability (0–4) <span>performance variability</span></div>
+      <div class="row4">
+        <div class="mini"><label>Initiation</label><input name="ex_init" placeholder="0"></div>
+        <div class="mini"><label>Completion</label><input name="ex_comp" placeholder="0"></div>
+        <div class="mini"><label>Flexibility</label><input name="ex_flex" placeholder="0"></div>
+        <div class="mini"><label>Work. memory</label><input name="ex_wm" placeholder="0"></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="secTitle">4) Motor & repetition <span>counts / minutes</span></div>
+      <div class="row4">
+        <div class="mini"><label>Walk eps &gt;5m</label><input name="walk_eps" placeholder="0"></div>
+        <div class="mini"><label>Longest walk (min)</label><input name="walk_long" placeholder="0"></div>
+        <div class="mini"><label>Directive repeats</label><input name="rep_dir" placeholder="0"></div>
+        <div class="mini"><label>Resume after cue</label><input name="resume_cue" placeholder="0"></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="secTitle">5) Communication pattern <span>observable markers</span></div>
+      <div class="row3">
+        <div class="mini"><label>Interruptions (&gt;5/day)</label><input name="interruptions" placeholder="0"></div>
+        <div class="mini"><label>Continuous talk (&gt;5m)</label>
+          <select name="talk5"><option value=""></option><option>Yes</option><option>No</option></select>
+        </div>
+        <div class="mini"><label>Reciprocal exchange</label>
+          <select name="recip"><option value=""></option><option>Yes</option><option>No</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="secTitle">6) Thought/perception stability <span>safety screen</span></div>
+      <div class="row3">
+        <div class="mini"><label>External voice</label>
+          <select name="voice_ext"><option value=""></option><option>Yes</option><option>No</option></select>
+        </div>
+        <div class="mini"><label>Suspicion (0–4)</label><input name="suspicion" placeholder="0"></div>
+        <div class="mini"><label>Reality testing issue</label>
+          <select name="reality"><option value=""></option><option>Yes</option><option>No</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="secTitle">7) Context modifiers <span>control variables</span></div>
+      <div class="row2">
+        <div class="mini"><label>Sleep quality (0–4)</label><input name="sleep_q" placeholder="0"></div>
+        <div class="mini"><label>Stress load (0–4)</label><input name="stress" placeholder="0"></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="secTitle">8) Physical safety <span>3× weekly vitals</span></div>
+      <div class="row3">
+        <div class="mini"><label>BP</label><input name="bp" placeholder="128/76"></div>
+        <div class="mini"><label>Pulse</label><input name="pulse" placeholder="72"></div>
+        <div class="mini"><label>Observer</label><input name="observer" placeholder="Name"></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="cell"><label>Signature</label><input name="sig" placeholder="__________"></div>
+      <div class="cell"><label>Site</label><input name="site" placeholder="GP / Home"></div>
+    </div>
+  </form>
+</main>
+
+<script>
+  document.getElementById("btnClear").addEventListener("click", () => {
+    if (!confirm("Clear all fields?")) return;
+    document.getElementById("form").reset();
+  });
+
+  function printOnePage(){
+    const form = document.getElementById("form");
+    const clone = form.cloneNode(true);
+
+    // Replace inputs/selects with underlined text for print consistency
+    clone.querySelectorAll("input, select, textarea").forEach(el => {
+      const value = (el.tagName === "SELECT") ? (el.value || "") : (el.value || "");
+      const span = document.createElement("span");
+      span.textContent = value;
+      span.style.display = "inline-block";
+      span.style.minWidth = "70px";
+      span.style.borderBottom = "1px solid #777";
+      span.style.padding = "0 6px";
+      span.style.fontSize = "11.5px";
+      el.replaceWith(span);
+    });
+
+    const printHTML = `
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Print</title>
+<style>
+  @page{ size:A4; margin:0; }
+  body{ margin:0; background:#fff; font-family: Arial, Tahoma, sans-serif; }
+  .page{ width:210mm; height:297mm; padding:8mm; overflow:hidden; }
+  .fit{ transform-origin: top left; }
+  *{ box-sizing:border-box; }
+  .sheet{ width:100%; height:100%; padding:0; border:none; box-shadow:none; overflow:hidden; }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div id="fit" class="fit">${clone.outerHTML}</div>
+  </div>
+<script>
+  function fitToPage(){
+    const page = document.querySelector('.page');
+    const fit = document.getElementById('fit');
+    fit.style.transform='scale(1)';
+    const r = fit.getBoundingClientRect();
+    const s = Math.min(1, page.clientWidth/r.width, page.clientHeight/r.height);
+    fit.style.transform='scale('+(s-0.01)+')';
+  }
+  window.onload=function(){
+    setTimeout(function(){ fitToPage(); setTimeout(function(){ window.print(); },200); },100);
+  };
+<\/script>
+</body>
+</html>`;
+
+    const w = window.open("", "_blank");
+    if (!w){ alert("Pop-ups blocked. Allow pop-ups to print."); return; }
+    w.document.open();
+    w.document.write(printHTML);
+    w.document.close();
+  }
+
+  document.getElementById("btnPrint").addEventListener("click", printOnePage);
+</script>
+</body>
+</html>
