@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Weekly Review Summary – Atomoxetine (A4 1-page)</title>
+<style>
+  :root{
+    --font: Arial, Tahoma, sans-serif;
+    --ink:#111; --muted:#444; --bd:#ddd; --bg:#fff; --panel:#f3f3f3;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; font-family:var(--font); background:var(--panel); color:var(--ink); }
+  header{
+    position:sticky; top:0; z-index:10;
+    background:#fff; border-bottom:1px solid var(--bd);
+    padding:10px 12px;
+  }
+  .topbar{
+    max-width:1100px; margin:0 auto;
+    display:flex; gap:10px; flex-wrap:wrap;
+    align-items:center; justify-content:space-between;
+  }
+  .title{ font-weight:900; font-size:16px; }
+  .controls{ display:flex; gap:8px; flex-wrap:wrap; }
+  button, a.nav{
+    border:1px solid var(--bd);
+    background:#fff;
+    padding:10px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    font-family:var(--font);
+    font-size:14px;
+    text-decoration:none;
+    color:#111;
+    display:inline-block;
+  }
+  button:hover, a.nav:hover{ background:#fafafa; }
+
+  main{ display:flex; justify-content:center; padding:14px; }
+
+  .sheet{
+    width:210mm; height:297mm;
+    background:var(--bg);
+    border:1px solid var(--bd);
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
+    padding:8mm;
+    overflow:hidden;
+  }
+
+  .hdr{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    gap:10px; margin-bottom:6px;
+  }
+  .h1{ font-weight:900; font-size:15px; }
+  .h2{ font-size:11px; color:var(--muted); text-align:right; }
+
+  .grid3{
+    display:grid;
+    grid-template-columns: 1.2fr 1fr 1fr;
+    gap:6px;
+    margin:6px 0 8px;
+  }
+  .cell{
+    border:1px solid #eee; border-radius:8px;
+    padding:6px 8px;
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    font-size:11.5px;
+    background:#fff;
+  }
+  .cell label{ color:var(--muted); font-weight:700; white-space:nowrap; }
+  input, select, textarea{
+    width:58%;
+    border:1px solid #ddd; border-radius:6px;
+    padding:5px 6px;
+    font-size:11.5px;
+    outline:none; background:#fff;
+  }
+  textarea{
+    width:100%;
+    min-height:56px;
+    resize:none;
+    margin-top:6px;
+  }
+
+  .sec{
+    border:1px solid #eee; border-radius:10px;
+    padding:6px 8px;
+    margin:6px 0;
+    background:#fff;
+  }
+  .secTitle{
+    font-weight:900; font-size:12px;
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom:4px;
+  }
+  .secTitle span{ font-weight:400; font-size:11px; color:var(--muted); }
+
+  .row4{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap:6px;
+  }
+  .row3{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap:6px;
+  }
+  .row2{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:6px;
+  }
+  .mini{
+    border:1px solid #f0f0f0; border-radius:8px;
+    padding:6px 8px;
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    font-size:11.5px;
+    background:#fff;
+  }
+  .mini label{ color:var(--muted); font-weight:700; white-space:nowrap; }
+  .mini input, .mini select{ width:52%; }
+
+  .footer{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:6px;
+    margin-top:6px;
+  }
+
+  @media print{ header, main{ display:none !important; } }
+</style>
+</head>
+
+<body>
+<header>
+  <div class="topbar">
+    <div class="title">Weekly Review Summary – Atomoxetine (1-page A4)</div>
+    <div class="controls">
+      <a class="nav" href="index.html">⬅︎ Home</a>
+      <button type="button" id="btnPrint">🖨️ Print (1 page)</button>
+      <button type="button" id="btnClear">🧹 Clear</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <form class="sheet" id="form" autocomplete="off">
+    <div class="hdr">
+      <div>
+        <div class="h1">Weekly Review Summary</div>
+        <div class="h2">Use after 3 observations + 7 daily self logs</div>
+      </div>
+      <div class="h2">≤15-word clinical summary • No extended interpretation</div>
+    </div>
+
+    <div class="grid3">
+      <div class="cell"><label>Patient</label><input name="patient" value="Salvana Aoshan"></div>
+      <div class="cell"><label>Week #</label><input name="week" placeholder="e.g., 2"></div>
+      <div class="cell"><label>Week dates</label><input name="dates" placeholder="DD/MM–DD/MM"></div>
+    </div>
+
+    <div class="sec">
+      <div class="secTitle">Medication <span>for this week</span></div>
+      <div class="row3">
+        <div class="mini"><label>Atomoxetine mg</label><input name="atom_mg" placeholder="10"></div>
+        <div class="mini"><label>Fluoxetine mg</label><input name="fluox_mg" placeholder="40"></div>
+        <div class="mini"><label>Olanzapine mg</label><input name="olanz_mg" placeholder="7.5"></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="secTitle">Mean scores (from 3 observations) <span>numeric only</span></div>
+      <div class="row4">
+        <div class="mini"><label>Mean arousal</label><input name="mean_arousal" placeholder="0.0"></div>
+        <div class="mini"><label>Mean executive</label><input name="mean_exec" placeholder="0.0"></div>
+        <div class="mini"><label>Mean suspicion</label><input name="mean_susp" placeholder="0.0"></div>
+        <div class="mini"><label>Voice days</label><input name="voice_days" placeholder="0"></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="secTitle">Motor pattern <span>trend markers</span></div>
+      <div class="row4">
+        <div class="mini"><label>Mean walk eps/day</label><input name="mean_walk_eps" placeholder="0"></div>
+        <div class="mini"><label>Longest walk trend</label>
+          <select name="long_trend"><option value=""></option><option>↑</option><option>=</option><option>↓</option></select>
+        </div>
+        <div class="mini"><label>Repetition trend</label>
+          <select name="rep_trend"><option value=""></option><option>↑</option><option>=</option><option>↓</option></select>
+        </div>
+        <div class="mini"><label>Interruptions trend</label>
+          <select name="int_trend"><option value=""></option><option>↑</option><option>=</option><option>↓</option></select>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="secTitle">Cardiovascular safety <span>from BP/pulse records</span></div>
+      <div class="row3">
+        <div class="mini"><label>Mean BP</label><input name="mean_bp" placeholder="128/76"></div>
+        <div class="mini"><label>Highest BP</label><input name="high_bp" placeholder="140/90"></div>
+        <div class="mini"><label>Mean pulse</label><input name="mean_pulse" placeholder="72"></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="secTitle">Side effects <span>present this week?</span></div>
+      <div class="row4">
+        <div class="mini"><label>Fatigue</label><select name="se_fat"><option value=""></option><option>Yes</option><option>No</option></select></div>
+        <div class="mini"><label>Activation</label><select name="se_act"><option value=""></option><option>Yes</option><option>No</option></select></div>
+        <div class="mini"><label>GI</label><select name="se_gi"><option value=""></option><option>Yes</option><option>No</option></select></div>
+        <div class="mini"><label>Sleep disruption</label><select name="se_sleep"><option value=""></option><option>Yes</option><option>No</option></select></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="secTitle">Dose–response signal <span>mechanistic check</span></div>
+      <div class="row3">
+        <div class="mini"><label>Arousal linked to hrs-since-dose?</label><select name="corr_ar"><option value=""></option><option>Yes</option><option>No</option></select></div>
+        <div class="mini"><label>Executive change independent of arousal?</label><select name="corr_ex"><option value=""></option><option>Yes</option><option>No</option></select></div>
+        <div class="mini"><label>Activation emerging post-dose window?</label><select name="corr_act"><option value=""></option><option>Yes</option><option>No</option></select></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="secTitle">Hypothesis check (initiation phase) <span>A/B/C</span></div>
+      <div class="row3">
+        <div class="mini"><label>A: arousal modulation</label><select name="hA"><option value=""></option><option>Yes</option><option>No</option></select></div>
+        <div class="mini"><label>B: executive improvement</label><select name="hB"><option value=""></option><option>Yes</option><option>No</option></select></div>
+        <div class="mini"><label>C: activation/fatigue pattern</label><select name="hC"><option value=""></option><option>Yes</option><option>No</option></select></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="secTitle">Overall determination <span>vs baseline</span></div>
+      <div class="row3">
+        <div class="mini"><label>Overall</label>
+          <select name="overall">
+            <option value=""></option>
+            <option>Improved</option>
+            <option>Stable</option>
+            <option>Worsened</option>
+          </select>
+        </div>
+        <div class="mini"><label>Reviewer</label><input name="reviewer" placeholder="Name"></div>
+        <div class="mini"><label>Date</label><input name="review_date" placeholder="DD/MM/YYYY"></div>
+      </div>
+
+      <label style="font-size:11px; color:#444; display:block; margin-top:6px;">
+        Clinical summary (≤15 words):
+      </label>
+      <textarea name="summary" placeholder="Max 15 words."></textarea>
+    </div>
+  </form>
+</main>
+
+<script>
+  document.getElementById("btnClear").addEventListener("click", () => {
+    if (!confirm("Clear all fields?")) return;
+    document.getElementById("form").reset();
+  });
+
+  function printOnePage(){
+    const form = document.getElementById("form");
+    const clone = form.cloneNode(true);
+
+    // Replace inputs/selects/textarea with underlined text for print consistency
+    clone.querySelectorAll("input, select, textarea").forEach(el => {
+      const value = (el.tagName === "SELECT") ? (el.value || "") : (el.value || "");
+      const span = document.createElement("span");
+      span.textContent = value;
+      span.style.display = "inline-block";
+      span.style.minWidth = "70px";
+      span.style.borderBottom = "1px solid #777";
+      span.style.padding = "0 6px";
+      span.style.fontSize = "11.5px";
+      span.style.verticalAlign = "bottom";
+      el.replaceWith(span);
+    });
+
+    const printHTML = `
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Print</title>
+<style>
+  @page{ size:A4; margin:0; }
+  body{ margin:0; background:#fff; font-family: Arial, Tahoma, sans-serif; }
+  .page{ width:210mm; height:297mm; padding:8mm; overflow:hidden; }
+  .fit{ transform-origin: top left; }
+  *{ box-sizing:border-box; }
+  .sheet{ width:100%; height:100%; padding:0; border:none; box-shadow:none; overflow:hidden; }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div id="fit" class="fit">${clone.outerHTML}</div>
+  </div>
+<script>
+  function fitToPage(){
+    const page = document.querySelector('.page');
+    const fit = document.getElementById('fit');
+    fit.style.transform='scale(1)';
+    const r = fit.getBoundingClientRect();
+    const s = Math.min(1, page.clientWidth/r.width, page.clientHeight/r.height);
+    fit.style.transform='scale('+(s-0.01)+')';
+  }
+  window.onload=function(){
+    setTimeout(function(){ fitToPage(); setTimeout(function(){ window.print(); },200); },100);
+  };
+<\/script>
+</body>
+</html>`;
+
+    const w = window.open("", "_blank");
+    if (!w){ alert("Pop-ups blocked. Allow pop-ups to print."); return; }
+    w.document.open();
+    w.document.write(printHTML);
+    w.document.close();
+  }
+
+  document.getElementById("btnPrint").addEventListener("click", printOnePage);
+</script>
+</body>
+</html>
