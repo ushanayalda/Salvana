@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>السجل اليومي – للطباعة فقط</title>
+  <style>
+    :root{
+      --font: Arial, Tahoma, sans-serif;
+      --ink:#111;
+      --muted:#444;
+      --border:#111;
+      --light:#e6e6e6;
+      --bg:#fff;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:var(--font);
+      background:#f3f3f3;
+      color:var(--ink);
+    }
+    header{
+      position:sticky; top:0;
+      background:#fff;
+      border-bottom:1px solid #ddd;
+      padding:10px 12px;
+      z-index:10;
+    }
+    .topbar{
+      max-width:980px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .title{
+      font-weight:900;
+      font-size:16px;
+    }
+    button{
+      border:1px solid #ddd;
+      background:#fff;
+      padding:10px 12px;
+      border-radius:10px;
+      font-family:var(--font);
+      font-size:14px;
+      cursor:pointer;
+    }
+    button:hover{ background:#fafafa; }
+    main{
+      padding:14px;
+      display:flex;
+      justify-content:center;
+    }
+
+    /* Preview sheet (same as print) */
+    .sheet{
+      width:210mm;
+      height:297mm;           /* lock to one page */
+      background:var(--bg);
+      border:1px solid #ddd;
+      box-shadow:0 8px 18px rgba(0,0,0,.08);
+      padding:12mm;
+      overflow:hidden;        /* prevent spill */
+    }
+
+    .h1{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      margin-bottom:8px;
+    }
+    .h1 .name{
+      font-weight:900;
+      font-size:18px;
+    }
+    .sub{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+
+    .row3{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:8px;
+      margin:8px 0 10px;
+    }
+    .boxline{
+      border:1px solid #ddd;
+      border-radius:10px;
+      padding:8px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+    }
+    .line{
+      border-bottom:1px solid #777;
+      flex:1;
+      height:0;
+      margin-right:8px;
+    }
+
+    .section{
+      border:1px solid #ddd;
+      border-radius:12px;
+      padding:8px 10px;
+      margin:8px 0;
+    }
+    .sectionTitle{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:6px;
+    }
+    .sectionTitle .left{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:900;
+      font-size:14px;
+    }
+    .marker{
+      width:18px; height:18px;
+      border:2px solid #111;
+      border-radius:4px;
+      display:inline-block;
+    }
+
+    /* 3-choice rows */
+    .q{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:8px;
+      align-items:start;
+      margin:5px 0;
+      font-size:13px;
+    }
+    .opt{
+      display:flex;
+      align-items:flex-start;
+      gap:6px;
+      border:1px solid #eee;
+      border-radius:10px;
+      padding:6px 8px;
+      min-height:34px;
+    }
+    .cb{
+      width:14px; height:14px;
+      border:2px solid #111;
+      border-radius:3px;
+      flex:0 0 auto;
+      margin-top:2px;
+    }
+
+    /* Medication block */
+    .medGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:6px;
+      font-size:13px;
+    }
+    .medRow{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid #eee;
+      border-radius:10px;
+      padding:6px 8px;
+    }
+    .doseLine{
+      border-bottom:1px solid #777;
+      flex:1;
+      height:0;
+      margin-right:8px;
+    }
+
+    .painRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:6px;
+      font-size:13px;
+    }
+    .painScale{
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+      justify-content:flex-start;
+    }
+    .num{
+      border:1px solid #ddd;
+      border-radius:999px;
+      padding:2px 6px;
+      font-size:12px;
+    }
+
+    .endRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:8px;
+      margin-top:6px;
+    }
+
+    .footer{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:8px;
+      margin-top:8px;
+      font-size:13px;
+    }
+
+    /* Print preview hints hidden in print window anyway */
+    @media print{
+      header, main{ display:none !important; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="topbar">
+    <div class="title">السجل اليومي – للطباعة فقط (صفحة واحدة)</div>
+    <button type="button" id="btnPrint">🖨️ طباعة</button>
+  </div>
+</header>
+
+<main>
+  <div class="sheet" id="sheetPreview"></div>
+</main>
+
+<script>
+  function sheetHTML(){
+    return `
+      <div class="h1">
+        <div>
+          <div class="name">السجل اليومي</div>
+          <div class="sub">ورقة واحدة – تُملأ بالقلم بعد الطباعة</div>
+        </div>
+        <div style="text-align:left; font-size:12px; color:#444;">
+          Dokotela / GP Review
+        </div>
+      </div>
+
+      <div class="row3">
+        <div class="boxline">الاسم<span class="line"></span></div>
+        <div class="boxline">التاريخ<span class="line"></span></div>
+        <div class="boxline">ساعات النوم<span class="line"></span></div>
+      </div>
+
+      <div class="section">
+        <div class="sectionTitle">
+          <div class="left"><span class="marker"></span> 💊 الدواء اليوم (مع الجرعة)</div>
+        </div>
+        <div class="medGrid">
+          <div class="medRow"><span class="cb"></span> فلوكستين — الجرعة: <span class="doseLine"></span></div>
+          <div class="medRow"><span class="cb"></span> أولانزابين — الجرعة: <span class="doseLine"></span></div>
+          <div class="medRow"><span class="cb"></span> أتوموكسيتين — الجرعة: <span class="doseLine"></span></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sectionTitle">
+          <div class="left"><span class="marker"></span> 🌡 المشاعر</div>
+        </div>
+
+        <div class="q">
+          <div class="opt"><span class="cb"></span> شدة المشاعر: مستقرة</div>
+          <div class="opt"><span class="cb"></span> أقوى من المعتاد</div>
+          <div class="opt"><span class="cb"></span> قوية ومؤثرة</div>
+        </div>
+        <div class="q">
+          <div class="opt"><span class="cb"></span> سرعة الانفعال: ببطء</div>
+          <div class="opt"><span class="cb"></span> بسرعة</div>
+          <div class="opt"><span class="cb"></span> فوراً</div>
+        </div>
+        <div class="q">
+          <div class="opt"><span class="cb"></span> بعد الانفعال: أهدأ بسرعة</div>
+          <div class="opt"><span class="cb"></span> أهدأ بعد وقت</div>
+          <div class="opt"><span class="cb"></span> بقيت منفعلة</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sectionTitle">
+          <div class="left"><span class="marker"></span> ✔ المهام</div>
+        </div>
+
+        <div class="q">
+          <div class="opt"><span class="cb"></span> بدء المهام: بدأت بسهولة</div>
+          <div class="opt"><span class="cb"></span> احتجت دفعة</div>
+          <div class="opt"><span class="cb"></span> لم أبدأ</div>
+        </div>
+        <div class="q">
+          <div class="opt"><span class="cb"></span> إكمال المهام: أكملت</div>
+          <div class="opt"><span class="cb"></span> أكملت جزء</div>
+          <div class="opt"><span class="cb"></span> لم أكمل</div>
+        </div>
+        <div class="q">
+          <div class="opt"><span class="cb"></span> عند المقاطعة: عدت بسهولة</div>
+          <div class="opt"><span class="cb"></span> ترددت</div>
+          <div class="opt"><span class="cb"></span> تركت الخطة</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sectionTitle">
+          <div class="left"><span class="marker"></span> 🚶 المشي</div>
+        </div>
+
+        <div class="q">
+          <div class="opt"><span class="cb"></span> المشي: طبيعي</div>
+          <div class="opt"><span class="cb"></span> أكثر من المعتاد</div>
+          <div class="opt"><span class="cb"></span> كثير رغم الألم</div>
+        </div>
+        <div class="q">
+          <div class="opt"><span class="cb"></span> عند الجلوس: جلست بسهولة</div>
+          <div class="opt"><span class="cb"></span> جلست قليلاً</div>
+          <div class="opt"><span class="cb"></span> لم أستطع البقاء</div>
+        </div>
+
+        <div class="painRow">
+          <div><strong>ألم الساق:</strong></div>
+          <div class="painScale">
+            ${Array.from({length:11}, (_,i)=>`<span class="num">${i}</span>`).join("")}
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sectionTitle">
+          <div class="left"><span class="marker"></span> 💬 الكلام</div>
+        </div>
+
+        <div class="q">
+          <div class="opt"><span class="cb"></span> حديث: متبادل</div>
+          <div class="opt"><span class="cb"></span> تكلمت أكثر</div>
+          <div class="opt"><span class="cb"></span> بدون توقف</div>
+        </div>
+        <div class="q">
+          <div class="opt"><span class="cb"></span> التوجيه: شرحت السبب</div>
+          <div class="opt"><span class="cb"></span> لم أشرح السبب</div>
+          <div class="opt"><span class="cb"></span> بدون وقت/خطة</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sectionTitle">
+          <div class="left"><span class="marker"></span> 🧠 الأفكار</div>
+        </div>
+
+        <div class="q">
+          <div class="opt"><span class="cb"></span> الأصوات: لا يوجد</div>
+          <div class="opt"><span class="cb"></span> أفكار قوية داخلي</div>
+          <div class="opt"><span class="cb"></span> صوت واضح خارجي</div>
+        </div>
+        <div class="q">
+          <div class="opt"><span class="cb"></span> الشك: لا يوجد</div>
+          <div class="opt"><span class="cb"></span> فكرة عابرة</div>
+          <div class="opt"><span class="cb"></span> واضح ومؤثر</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sectionTitle">
+          <div class="left"><span class="marker"></span> 🌙 النوم</div>
+        </div>
+
+        <div class="q">
+          <div class="opt"><span class="cb"></span> النوم: جيد</div>
+          <div class="opt"><span class="cb"></span> استيقظت مرة</div>
+          <div class="opt"><span class="cb"></span> متقطع/قصير</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="sectionTitle">
+          <div class="left"><span class="marker"></span> نهاية اليوم</div>
+        </div>
+
+        <div class="endRow">
+          <div class="opt"><span class="cb"></span> أفضل من أمس</div>
+          <div class="opt"><span class="cb"></span> نفس أمس</div>
+          <div class="opt"><span class="cb"></span> أصعب من أمس</div>
+        </div>
+
+        <div class="footer">
+          <div class="boxline">التوقيع<span class="line"></span></div>
+          <div class="boxline">ملاحظة قصيرة (اختياري)<span class="line"></span></div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Render preview
+  document.getElementById("sheetPreview").innerHTML = sheetHTML();
+
+  // Reliable print: open a clean print window containing ONLY the sheet
+  function printTemplate(){
+    const html = `
+      <!doctype html>
+      <html lang="ar" dir="rtl">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Print</title>
+        <style>
+          @page { size: A4; margin: 0; }
+          body { margin: 0; font-family: Arial, Tahoma, sans-serif; background: #fff; }
+          .sheet { width: 210mm; height: 297mm; padding: 12mm; overflow:hidden; }
+          /* Minimal styles copied */
+          .h1{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:8px}
+          .name{font-weight:900;font-size:18px}
+          .sub{font-size:12px;color:#444;margin-top:2px}
+          .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin:8px 0 10px}
+          .boxline{border:1px solid #ddd;border-radius:10px;padding:8px;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:13px}
+          .line{border-bottom:1px solid #777;flex:1;height:0;margin-right:8px}
+          .section{border:1px solid #ddd;border-radius:12px;padding:8px 10px;margin:8px 0}
+          .sectionTitle{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+          .left{display:flex;align-items:center;gap:10px;font-weight:900;font-size:14px}
+          .marker{width:18px;height:18px;border:2px solid #111;border-radius:4px;display:inline-block}
+          .q{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;align-items:start;margin:5px 0;font-size:13px}
+          .opt{display:flex;align-items:flex-start;gap:6px;border:1px solid #eee;border-radius:10px;padding:6px 8px;min-height:34px}
+          .cb{width:14px;height:14px;border:2px solid #111;border-radius:3px;flex:0 0 auto;margin-top:2px}
+          .medGrid{display:grid;grid-template-columns:1fr;gap:6px;font-size:13px}
+          .medRow{display:flex;align-items:center;gap:8px;border:1px solid #eee;border-radius:10px;padding:6px 8px}
+          .doseLine{border-bottom:1px solid #777;flex:1;height:0;margin-right:8px}
+          .painRow{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:6px;font-size:13px}
+          .painScale{display:flex;gap:6px;flex-wrap:wrap}
+          .num{border:1px solid #ddd;border-radius:999px;padding:2px 6px;font-size:12px}
+          .endRow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:6px}
+          .footer{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;font-size:13px}
+        </style>
+      </head>
+      <body>
+        <div class="sheet">${sheetHTML()}</div>
+        <script>
+          window.onload = function(){ setTimeout(function(){ window.print(); }, 250); };
+        <\/script>
+      </body>
+      </html>
+    `;
+
+    const w = window.open("", "_blank");
+    if (!w){
+      alert("الطباعة تحتاج السماح بالنوافذ المنبثقة (Pop-ups).");
+      return;
+    }
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+  }
+
+  document.getElementById("btnPrint").addEventListener("click", printTemplate);
+</script>
+</body>
+</html>
