@@ -1,56 +1,320 @@
 <!doctype html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Atomoxetine Monitoring – v1.0</title>
+  <title>السجل اليومي – سلفانا</title>
+
   <style>
-    body{font-family:Arial,system-ui; margin:0; background:#f3f3f3; color:#111;}
-    header{background:#fff; border-bottom:1px solid #ddd; padding:14px;}
-    .wrap{max-width:900px; margin:0 auto;}
-    h1{margin:0; font-size:18px;}
-    p{color:#444; line-height:1.6;}
-    .cards{display:grid; grid-template-columns:1fr; gap:10px; margin:14px 0;}
-    a.card{
-      display:block; text-decoration:none; color:#111;
-      background:#fff; border:1px solid #ddd; border-radius:12px;
-      padding:12px;
+    :root{
+      --font: Arial, Tahoma, sans-serif;
+      --ink:#111;
+      --bd:#000;
+      --pad:15mm; /* 1.5 cm */
     }
-    a.card:hover{background:#fafafa;}
-    .t{font-weight:900;}
-    .s{color:#444; font-size:13px; margin-top:4px;}
-    .note{font-size:12px; color:#555;}
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--ink);
+      background:#f3f3f3;
+      line-height:1.15; /* tight, Word-like */
+    }
+
+    /* UI (hidden on print) */
+    header{
+      position:sticky;
+      top:0;
+      z-index:10;
+      background:#fff;
+      border-bottom:1px solid #ddd;
+      padding:10px 12px;
+    }
+    .topbar{
+      max-width:980px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .title-ui{ font-weight:900; font-size:14px; }
+    button{
+      border:1px solid #ddd;
+      background:#fff;
+      padding:10px 12px;
+      border-radius:10px;
+      font-family:var(--font);
+      font-size:14px;
+      cursor:pointer;
+    }
+    button:hover{ background:#fafafa; }
+
+    main{
+      display:flex;
+      justify-content:center;
+      padding:14px;
+    }
+
+    /* A4 sheet */
+    .sheet{
+      width:210mm;
+      height:297mm;
+      background:#fff;
+      padding:var(--pad);
+      border:1px solid #ddd;
+      overflow:hidden; /* no cutovers */
+    }
+
+    /* Typography (Word spec) */
+    .h1{
+      font-size:16pt;
+      font-weight:900;
+      margin:0 0 6px 0;
+      text-align:right;
+    }
+    .h2{
+      font-size:12pt;
+      font-weight:900;
+      margin:10px 0 4px 0;
+      text-align:right;
+    }
+    .txt{
+      font-size:11pt;
+      margin:0 0 3px 0;
+      text-align:right;
+    }
+
+    /* Lines + boxes */
+    .line{
+      display:inline-block;
+      border-bottom:1px solid #000;
+      min-width:42mm;
+      height:0.95em;
+      vertical-align:bottom;
+      margin:0 6px;
+    }
+    .line-wide{ min-width:70mm; }
+    .cb{
+      font-family:var(--font);
+      font-size:11pt;
+      margin:0 0 3px 0;
+      text-align:right;
+      white-space:nowrap;
+    }
+
+    /* Header grid: 3 columns */
+    .meta{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:8px;
+      margin:6px 0 6px 0;
+    }
+    .meta .box{
+      border:1px solid #000;
+      padding:6px 8px;
+      border-radius:0;
+      font-size:11pt;
+    }
+    .meta .box strong{ font-weight:900; }
+
+    /* Medication block */
+    .med{
+      border:1px solid #000;
+      padding:6px 8px;
+      margin:6px 0 8px 0;
+      font-size:11pt;
+    }
+    .med-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin:2px 0;
+    }
+    .med-item{
+      white-space:nowrap;
+      font-size:11pt;
+    }
+    .dose{
+      display:inline-block;
+      border-bottom:1px solid #000;
+      min-width:32mm;
+      height:0.95em;
+      vertical-align:bottom;
+      margin-right:6px;
+    }
+
+    /* Two-column body */
+    .cols{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10mm;
+      margin-top:4px;
+    }
+    .block{
+      border:1px solid #000;
+      padding:6px 8px;
+    }
+
+    /* Small helpers */
+    .note-line{
+      display:block;
+      border-bottom:1px solid #000;
+      height:0.95em;
+      margin-top:4px;
+    }
+
+    /* Pain scale */
+    .pain{
+      font-size:11pt;
+      margin-top:4px;
+    }
+
+    /* Print */
+    @media print{
+      header, main{ display:none !important; }
+    }
   </style>
 </head>
+
 <body>
-  <header>
-    <div class="wrap">
-      <h1>Atomoxetine Monitoring – Version 1.0 (Locked)</h1>
-      <p class="note">Fill on screen → Print as 1 A4 page. No autosave. Printing opens a clean print window.</p>
-    </div>
-  </header>
+<header>
+  <div class="topbar">
+    <div class="title-ui">السجل اليومي – سلفانا (جاهز للطباعة)</div>
+    <button type="button" id="btnPrint">🖨️ طباعة A4</button>
+  </div>
+</header>
 
-  <main class="wrap">
-    <div class="cards">
-      <a class="card" href="salvana-daily-ar.html">
-        <div class="t">Salvana Daily Self Log (Arabic) – Daily</div>
-        <div class="s">3-choice anchors • Behavioural • No labels</div>
-      </a>
+<main>
+  <div class="sheet" id="sheet">
+    <div class="h1">السجل اليومي – سلفانا (يومياً)</div>
 
-      <a class="card" href="observer-3x-en.html">
-        <div class="t">Observer Log (English) – 3× weekly</div>
-        <div class="s">Dose/time • 0–4 anchors • BP/Pulse • Counts</div>
-      </a>
-
-      <a class="card" href="weekly-review-en.html">
-        <div class="t">Weekly Review Summary (English) – Weekly</div>
-        <div class="s">Means/trends • Hypothesis check • ≤15-word summary</div>
-      </a>
+    <div class="meta">
+      <div class="box"><strong>الاسم:</strong> <span class="line"></span></div>
+      <div class="box"><strong>التاريخ:</strong> <span class="line"></span></div>
+      <div class="box"><strong>ساعات النوم:</strong> <span class="line"></span></div>
     </div>
 
-    <p class="note">
-      Printing tip (Android): In print dialog, set <b>Paper size = A4</b> once if it defaults to Letter.
-    </p>
-  </main>
+    <div class="h2">الدواء اليوم (إذا تعرفين الجرعة اكتبيها)</div>
+    <div class="med">
+      <div class="med-row">
+        <div class="med-item">☐ فلوكستين — الجرعة: <span class="dose"></span></div>
+        <div class="med-item">☐ أولانزابين — الجرعة: <span class="dose"></span></div>
+        <div class="med-item">☐ أتوموكسيتين — الجرعة: <span class="dose"></span></div>
+      </div>
+    </div>
+
+    <div class="cols">
+      <!-- RIGHT COLUMN -->
+      <div class="block">
+        <div class="h2">القسم الأول – طلبات الشغل اليومي</div>
+        <div class="txt">اليوم من ردتي شغلة تخلص، ومحد نفّذ طلبچ</div>
+        <div class="txt">(مثال: أكل، سباحة، ترتيب، تنظيف)</div>
+
+        <div class="txt" style="font-weight:900; margin-top:6px;">شنو صار؟ (ممكن تختارين أكثر من واحد)</div>
+        <div class="cb">☐ انطيتي أمر مرة وحدة</div>
+        <div class="cb">☐ انطيتي أمر أكثر من مرة</div>
+        <div class="cb">☐ ضليتي تطلبين نفس الطلب هواي</div>
+        <div class="cb">☐ طلبتي من شخص ثاني يدخل حتى يتنفذ الطلب</div>
+
+        <div class="txt" style="font-weight:900; margin-top:6px;">من أول مرة طلبتي، شكد انتظرتي قبل ما ترجعي تطلبين؟ (اختاري واحد)</div>
+        <div class="cb">☐ انتظرت شوية</div>
+        <div class="cb">☐ رجعت بعد كم دقيقة</div>
+        <div class="cb">☐ رجعت بسرعة تقريباً فوراً</div>
+
+        <div class="txt" style="font-weight:900; margin-top:6px;">هالموضوع شكد طول ويّاچ؟ (من أول طلب لحد ما هديتي) (اختاري واحد)</div>
+        <div class="cb">☐ أقل من 10 دقايق</div>
+        <div class="cb">☐ بين 10 دقيقة إلى ساعة</div>
+        <div class="cb">☐ أكثر من ساعة</div>
+
+        <div class="txt" style="font-weight:900; margin-top:6px;">من صار اتفاق أو خلص الموضوع، شصار؟ (اختاري واحد)</div>
+        <div class="cb">☐ هديت ورجعت طبيعي</div>
+        <div class="cb">☐ هديت بس بعدني أفكر بالموضوع</div>
+        <div class="cb">☐ خلص هذا وبديت بموضوع ثاني بسرعة</div>
+      </div>
+
+      <!-- LEFT COLUMN -->
+      <div class="block">
+        <div class="h2">القسم الثاني – التعبير عن الشي اللي جواج</div>
+        <div class="txt">اليوم من ردتي تكولين شي جواج</div>
+        <div class="txt">(مثال: انزعاج، جرح مشاعر، فرح، طلب شخصي)</div>
+
+        <div class="txt" style="font-weight:900; margin-top:6px;">شلون كلتيها؟ (اختاري واحد)</div>
+        <div class="cb">☐ كلتيها مباشرة</div>
+        <div class="cb">☐ لفيتي بالحجي شوية وبعدين كلتيها</div>
+        <div class="cb">☐ خليتي شخص ثالث يطب بالموضوع</div>
+
+        <div class="h2" style="margin-top:10px;">القسم الثالث – جسمچ اليوم</div>
+        <div class="cb">☐ عادي</div>
+        <div class="cb">☐ رجلي تعبت شوية</div>
+        <div class="cb">☐ رجلي دا توجعني من المشي</div>
+        <div class="pain">ألم الساق (حطي دائرة): 0 1 2 3 4 5 6 7 8 9 10</div>
+
+        <div class="h2" style="margin-top:10px;">القسم الرابع – صار شي يخوّف اليوم؟</div>
+        <div class="cb">☐ لا</div>
+        <div class="cb">☐ فكرة بسيطة وعدّت</div>
+        <div class="cb">☐ حسّيتي شي غريب</div>
+
+        <div class="h2" style="margin-top:10px;">القسم الخامس – سويتي شي من نفسچ (اختياري)</div>
+        <div class="cb">☐ اتصلتي بشخص</div>
+        <div class="cb">☐ بدأتي سوالف جديدة</div>
+        <div class="cb">☐ رحتي مكان وحدچ</div>
+        <div class="cb">☐ طبختي / رتبتي بدون ما أحد يطلب</div>
+        <div class="cb">☐ شي ثاني: <span class="line line-wide"></span></div>
+        <div class="cb">☐ لا شي جديد اليوم</div>
+
+        <div class="h2" style="margin-top:10px;">نهاية اليوم</div>
+        <div class="cb">☐ أفضل من أمس</div>
+        <div class="cb">☐ نفس أمس</div>
+        <div class="cb">☐ أصعب من أمس</div>
+
+        <div class="txt" style="font-weight:900; margin-top:8px;">التوقيع:</div>
+        <span class="note-line"></span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Print via clean window to avoid browser UI/margin issues.
+  function printA4(){
+    const content = document.getElementById("sheet").outerHTML;
+
+    const html = `
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Print</title>
+<style>
+  @page{ size:A4; margin:0; }
+  body{ margin:0; background:#fff; font-family: Arial, Tahoma, sans-serif; color:#111; }
+  .page{ width:210mm; height:297mm; padding:${getComputedStyle(document.documentElement).getPropertyValue('--pad')}; overflow:hidden; }
+  *{ box-sizing:border-box; }
+  .sheet{ width:210mm; height:297mm; background:#fff; padding:${getComputedStyle(document.documentElement).getPropertyValue('--pad')}; overflow:hidden; border:none; }
+  /* ensure no shadows */
+  .sheet{ box-shadow:none !important; }
+</style>
+</head>
+<body>
+  <div class="page">${content}</div>
+<script>
+  window.onload=function(){ setTimeout(function(){ window.print(); },200); };
+<\/script>
+</body>
+</html>`;
+
+    const w = window.open("", "_blank");
+    if(!w){ alert("الرجاء السماح بالنوافذ المنبثقة للطباعة."); return; }
+    w.document.open();
+    w.document.write(html);
+    w.document.close();
+  }
+
+  document.getElementById("btnPrint").addEventListener("click", printA4);
+</script>
 </body>
 </html>
